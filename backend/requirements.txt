@@ -1,0 +1,40 @@
+# FastAPI Backend
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Database
+sqlalchemy==2.0.23
+alembic==1.12.1
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+
+# Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+pydantic[email]==2.5.2
+pydantic-settings==2.1.0
+
+# AI Services
+openai==1.3.7
+anthropic==0.7.7
+
+# Real-time
+websockets==12.0
+python-socketio==5.10.0
+
+# Code Execution
+httpx==0.25.2
+aiohttp==3.9.1
+
+# Caching
+redis==5.0.1
+aioredis==2.0.1
+
+# Task Queue
+celery==5.3.4
+
+# Utils
+python-dotenv==1.0.0
+orjson==3.9.10
+
