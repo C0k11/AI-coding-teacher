@@ -97,29 +97,8 @@ Visit http://localhost:3000 to get started.
 ## Project Structure
 
 ```
-AI-coding-teacher/
-├── frontend/                 # Next.js frontend
-│   ├── src/
-│   │   ├── app/             # Pages and routes
-│   │   │   ├── problems/    # Problem library
-│   │   │   ├── interview/   # Interview pages
-│   │   │   ├── battle/      # Battle pages
-│   │   │   └── dashboard/   # Dashboard
-│   │   ├── components/      # React components
-│   │   ├── lib/             # Utilities and API
-│   │   └── store/           # Zustand store
-│   └── package.json
-│
-├── backend/                  # FastAPI backend
-│   ├── app/
-│   │   ├── routers/         # API routes
-│   │   ├── services/        # Business logic
-│   │   ├── models/          # Data models
-│   │   └── schemas/         # Pydantic schemas
-│   ├── requirements.txt
-│   └── seed_data.py         # Sample data
-│
-└── README.md
+frontend/          Next.js 14 app
+backend/           FastAPI server
 ```
 
 ## Configuration
