@@ -21,23 +21,23 @@ import { useAuthStore, useBattleStore } from '@/store/useStore'
 const BATTLE_MODES = [
   { 
     id: 'quick_match', 
-    name: '快速匹配', 
+    name: 'Quick Match', 
     icon: Zap, 
-    description: '随机匹配相近水平的对手',
+    description: 'Match with opponents of similar skill level',
     color: 'from-orange-500 to-red-500'
   },
   { 
     id: 'friend_challenge', 
-    name: '好友挑战', 
+    name: 'Friend Challenge', 
     icon: Users, 
-    description: '邀请好友进行 1v1 对战',
+    description: 'Challenge a friend to a 1v1 battle',
     color: 'from-blue-500 to-cyan-500'
   },
   { 
     id: 'tournament', 
-    name: '锦标赛', 
+    name: 'Tournament', 
     icon: Trophy, 
-    description: '参加周赛，争夺排名',
+    description: 'Join weekly tournaments and compete for ranking',
     color: 'from-yellow-500 to-orange-500'
   },
 ]
@@ -72,7 +72,7 @@ export default function BattlePage() {
           title: 'Two Sum',
           slug: 'two-sum',
           difficulty: 'easy',
-          description: '给定一个整数数组 nums 和一个整数目标值 target...',
+          description: 'Given an array of integers nums and an integer target...',
           examples: [{ input: 'nums = [2,7,11,15], target = 9', output: '[0,1]' }],
           starter_code: {
             python: 'class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        pass'
@@ -98,7 +98,7 @@ export default function BattlePage() {
         }
       } else {
         // Demo mode
-        startBattle(mockBattle.battle_id, mockBattle.problem, 'AI对手', mockBattle.time_limit_seconds)
+        startBattle(mockBattle.battle_id, mockBattle.problem, 'AI Opponent', mockBattle.time_limit_seconds)
       }
 
       router.push('/battle/arena')
@@ -121,10 +121,10 @@ export default function BattlePage() {
             <span className="text-xl font-bold">AI Coding Teacher</span>
           </Link>
           <div className="flex items-center gap-6">
-            <Link href="/problems" className="text-dark-300 hover:text-white transition">题库</Link>
-            <Link href="/interview" className="text-dark-300 hover:text-white transition">面试</Link>
-            <Link href="/battle" className="text-white font-medium">对战</Link>
-            <Link href="/dashboard" className="text-dark-300 hover:text-white transition">仪表盘</Link>
+            <Link href="/problems" className="text-dark-300 hover:text-white transition">Problems</Link>
+            <Link href="/interview" className="text-dark-300 hover:text-white transition">Interview</Link>
+            <Link href="/battle" className="text-white font-medium">Battle</Link>
+            <Link href="/dashboard" className="text-dark-300 hover:text-white transition">Dashboard</Link>
           </div>
         </div>
       </nav>
@@ -134,16 +134,16 @@ export default function BattlePage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/20 text-orange-400 text-sm mb-4">
             <Swords className="w-4 h-4" />
-            代码对战
+            Code Battle
           </div>
-          <h1 className="text-4xl font-bold mb-4">实时 1v1 对战</h1>
-          <p className="text-dark-400 text-lg">与全球选手一较高下，相同题目，看谁先完成</p>
+          <h1 className="text-4xl font-bold mb-4">Real-time 1v1 Battle</h1>
+          <p className="text-dark-400 text-lg">Compete with players worldwide on the same problem, see who finishes first</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
           {/* Left - Battle Modes */}
           <div className="md:col-span-2 space-y-6">
-            <h2 className="text-xl font-bold">选择对战模式</h2>
+            <h2 className="text-xl font-bold">Select Battle Mode</h2>
             
             <div className="space-y-4">
               {BATTLE_MODES.map((mode) => (
@@ -181,12 +181,12 @@ export default function BattlePage() {
                 animate={{ opacity: 1, height: 'auto' }}
                 className="bg-dark-800 rounded-xl p-6 border border-dark-700"
               >
-                <label className="block text-sm text-dark-400 mb-2">好友用户名</label>
+                <label className="block text-sm text-dark-400 mb-2">Friend Username</label>
                 <input
                   type="text"
                   value={friendUsername}
                   onChange={(e) => setFriendUsername(e.target.value)}
-                  placeholder="输入好友的用户名"
+                  placeholder="Enter friend's username"
                   className="w-full px-4 py-3 bg-dark-700 border border-dark-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </motion.div>
@@ -204,7 +204,7 @@ export default function BattlePage() {
               )}
             >
               <Swords className="w-5 h-5" />
-              {isSearching ? '匹配中...' : '开始对战'}
+              {isSearching ? 'Matching...' : 'Start Battle'}
             </button>
 
             {/* Battle Info */}
@@ -212,17 +212,17 @@ export default function BattlePage() {
               <div className="bg-dark-800 rounded-xl p-4 border border-dark-700 text-center">
                 <Clock className="w-6 h-6 mx-auto mb-2 text-dark-400" />
                 <div className="text-lg font-bold">15:00</div>
-                <div className="text-xs text-dark-400">时间限制</div>
+                <div className="text-xs text-dark-400">Time Limit</div>
               </div>
               <div className="bg-dark-800 rounded-xl p-4 border border-dark-700 text-center">
                 <Target className="w-6 h-6 mx-auto mb-2 text-dark-400" />
                 <div className="text-lg font-bold">1v1</div>
-                <div className="text-xs text-dark-400">对战模式</div>
+                <div className="text-xs text-dark-400">Battle Mode</div>
               </div>
               <div className="bg-dark-800 rounded-xl p-4 border border-dark-700 text-center">
                 <Trophy className="w-6 h-6 mx-auto mb-2 text-dark-400" />
                 <div className="text-lg font-bold">+25</div>
-                <div className="text-xs text-dark-400">胜利积分</div>
+                <div className="text-xs text-dark-400">Win Points</div>
               </div>
             </div>
           </div>
@@ -231,7 +231,7 @@ export default function BattlePage() {
           <div className="space-y-6">
             <h2 className="text-xl font-bold flex items-center gap-2">
               <Trophy className="w-5 h-5 text-yellow-400" />
-              排行榜
+              Leaderboard
             </h2>
 
             <div className="bg-dark-800 rounded-xl border border-dark-700 overflow-hidden">
@@ -254,7 +254,7 @@ export default function BattlePage() {
                   </div>
                   <div className="flex-1">
                     <div className="font-medium">{player.username}</div>
-                    <div className="text-xs text-dark-400">{player.battles_won} 胜</div>
+                    <div className="text-xs text-dark-400">{player.battles_won} Wins</div>
                   </div>
                   <div className="text-right">
                     <div className="font-mono font-bold text-orange-400">{player.elo_rating}</div>
@@ -267,7 +267,7 @@ export default function BattlePage() {
             {/* User Stats */}
             {user && (
               <div className="bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl p-4 border border-orange-500/30">
-                <div className="text-sm text-dark-400 mb-1">你的排名</div>
+                <div className="text-sm text-dark-400 mb-1">Your Rank</div>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold">#{user.elo_rating > 2000 ? '125' : '500+'}</span>
                   <span className="text-orange-400 font-mono">{user.elo_rating} ELO</span>

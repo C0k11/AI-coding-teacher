@@ -49,7 +49,7 @@ export default function TestResults({
             {getStatusText(status)}
           </h3>
           <p className="text-dark-400 text-sm">
-            通过 {passedCount}/{totalCount} 个测试用例
+            Passed {passedCount}/{totalCount} test cases
             {totalRuntime && ` · ${totalRuntime}ms`}
           </p>
         </div>
@@ -74,7 +74,7 @@ export default function TestResults({
                 ) : (
                   <XCircle className="w-4 h-4 text-red-400" />
                 )}
-                <span className="font-medium">测试用例 {result.test_case}</span>
+                <span className="font-medium">Test Case {result.test_case}</span>
               </div>
               {result.runtime_ms !== undefined && (
                 <span className="text-sm text-dark-400 flex items-center gap-1">
@@ -86,14 +86,14 @@ export default function TestResults({
 
             <div className="p-4 space-y-3 text-sm">
               <div>
-                <span className="text-dark-400">输入：</span>
+                <span className="text-dark-400">Input:</span>
                 <pre className="mt-1 p-2 bg-dark-800 rounded font-mono text-xs overflow-x-auto">
                   {result.input}
                 </pre>
               </div>
 
               <div>
-                <span className="text-dark-400">预期输出：</span>
+                <span className="text-dark-400">Expected Output:</span>
                 <pre className="mt-1 p-2 bg-dark-800 rounded font-mono text-xs text-green-400 overflow-x-auto">
                   {result.expected_output}
                 </pre>
@@ -101,9 +101,9 @@ export default function TestResults({
 
               {!result.passed && (
                 <div>
-                  <span className="text-dark-400">实际输出：</span>
+                  <span className="text-dark-400">Actual Output:</span>
                   <pre className="mt-1 p-2 bg-dark-800 rounded font-mono text-xs text-red-400 overflow-x-auto">
-                    {result.actual_output || '(无输出)'}
+                    {result.actual_output || '(no output)'}
                   </pre>
                 </div>
               )}
@@ -112,7 +112,7 @@ export default function TestResults({
                 <div>
                   <span className="text-red-400 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
-                    错误：
+                    Error:
                   </span>
                   <pre className="mt-1 p-2 bg-red-500/10 rounded font-mono text-xs text-red-400 overflow-x-auto">
                     {result.error}
@@ -128,7 +128,7 @@ export default function TestResults({
       {aiFeeback && (
         <div className="border-t border-dark-700 pt-4">
           <h4 className="font-semibold mb-2 flex items-center gap-2">
-            <span className="text-purple-400">AI</span> 代码分析
+            <span className="text-purple-400">AI</span> Code Analysis
           </h4>
           <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
             <p className="text-dark-200 text-sm whitespace-pre-wrap">{aiFeeback}</p>

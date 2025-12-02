@@ -12,7 +12,7 @@ export function formatTime(seconds: number): string {
 }
 
 export function formatDate(date: string | Date): string {
-  return new Date(date).toLocaleDateString('zh-CN', {
+  return new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -20,7 +20,7 @@ export function formatDate(date: string | Date): string {
 }
 
 export function formatDateTime(date: string | Date): string {
-  return new Date(date).toLocaleString('zh-CN', {
+  return new Date(date).toLocaleString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -75,15 +75,15 @@ export function getStatusColor(status: string): string {
 export function getStatusText(status: string): string {
   switch (status.toLowerCase()) {
     case 'accepted':
-      return '通过'
+      return 'Accepted'
     case 'wrong_answer':
-      return '答案错误'
+      return 'Wrong Answer'
     case 'time_limit_exceeded':
-      return '超时'
+      return 'Time Limit Exceeded'
     case 'runtime_error':
-      return '运行错误'
+      return 'Runtime Error'
     case 'compile_error':
-      return '编译错误'
+      return 'Compile Error'
     default:
       return status
   }

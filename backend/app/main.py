@@ -15,9 +15,9 @@ from app.services.websocket_manager import sio
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan handler"""
-    print("🚀 AI Coding Teacher Backend Starting...")
+    print("AI Coding Teacher Backend Starting...")
     yield
-    print("👋 Shutting down...")
+    print("Shutting down...")
 
 
 # Create FastAPI app

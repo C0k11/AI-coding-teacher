@@ -19,24 +19,24 @@ import { interviews, type InterviewConfig } from '@/lib/api'
 import { useAuthStore, useInterviewStore } from '@/store/useStore'
 
 const INTERVIEW_TYPES = [
-  { id: 'algorithm', name: '算法面试', icon: Code2, description: '数据结构和算法问题', color: 'from-blue-500 to-cyan-500' },
-  { id: 'system_design', name: '系统设计', icon: Settings, description: '大规模系统架构设计', color: 'from-purple-500 to-pink-500' },
-  { id: 'behavioral', name: '行为面试', icon: Brain, description: 'STAR方法,软技能考察', color: 'from-green-500 to-emerald-500' },
-  { id: 'frontend', name: '前端专项', icon: Sparkles, description: 'React/Vue,性能优化', color: 'from-orange-500 to-red-500' },
+  { id: 'algorithm', name: 'Algorithm Interview', icon: Code2, description: 'Data structures and algorithms', color: 'from-blue-500 to-cyan-500' },
+  { id: 'system_design', name: 'System Design', icon: Settings, description: 'Large-scale system architecture design', color: 'from-purple-500 to-pink-500' },
+  { id: 'behavioral', name: 'Behavioral Interview', icon: Brain, description: 'STAR method, soft skills assessment', color: 'from-green-500 to-emerald-500' },
+  { id: 'frontend', name: 'Frontend Specialized', icon: Sparkles, description: 'React/Vue, performance optimization', color: 'from-orange-500 to-red-500' },
 ]
 
 const COMPANIES = [
-  { id: 'google', name: 'Google', style: '友好但追求最优解' },
-  { id: 'meta', name: 'Meta', style: '注重代码简洁和实际场景' },
-  { id: 'amazon', name: 'Amazon', style: '注重沟通和领导力原则' },
-  { id: 'microsoft', name: 'Microsoft', style: '技术深度和广度并重' },
-  { id: 'startup', name: 'Startup', style: '务实高效,快速解决问题' },
+  { id: 'google', name: 'Google', style: 'Friendly but pursue optimal solutions' },
+  { id: 'meta', name: 'Meta', style: 'Focus on code simplicity and real scenarios' },
+  { id: 'amazon', name: 'Amazon', style: 'Emphasize communication and leadership principles' },
+  { id: 'microsoft', name: 'Microsoft', style: 'Balance technical depth and breadth' },
+  { id: 'startup', name: 'Startup', style: 'Practical and efficient, solve problems quickly' },
 ]
 
 const DIFFICULTIES = [
-  { id: 'easy', name: '简单', description: '基础问题,适合入门' },
-  { id: 'medium', name: '中等', description: '标准面试难度' },
-  { id: 'hard', name: '困难', description: '高级问题,挑战自我' },
+  { id: 'easy', name: 'Easy', description: 'Basic problems, suitable for beginners' },
+  { id: 'medium', name: 'Medium', description: 'Standard interview difficulty' },
+  { id: 'hard', name: 'Hard', description: 'Advanced problems, challenge yourself' },
 ]
 
 const DURATIONS = [30, 45, 60]
@@ -67,14 +67,14 @@ export default function InterviewPage() {
         difficulty: config.difficulty,
         duration_minutes: config.duration_minutes,
         problem: {
-          title: config.interview_type === 'algorithm' ? 'LRU Cache' : '设计 Twitter',
+          title: config.interview_type === 'algorithm' ? 'LRU Cache' : 'Design Twitter',
           description: config.interview_type === 'algorithm' 
-            ? '请实现一个 LRU Cache，支持 get 和 put 操作，时间复杂度 O(1)。'
-            : '设计一个简化版的 Twitter，支持发布推文、关注用户、获取 Feed。'
+            ? 'Please implement an LRU Cache that supports get and put operations with O(1) time complexity.'
+            : 'Design a simplified version of Twitter that supports posting tweets, following users, and getting feed.'
         },
-        initial_message: `你好！我是今天的面试官，来自 ${config.company}。我们今天有 ${config.duration_minutes} 分钟的时间。
+        initial_message: `Hello! I'm your interviewer today from ${config.company}. We have ${config.duration_minutes} minutes for today's interview.
 
-在开始之前，你可以先简单介绍一下自己吗？然后我们就开始今天的面试题目。`
+Before we begin, could you briefly introduce yourself? Then we'll start with today's interview problem.`
       }
 
       if (token) {
@@ -127,10 +127,10 @@ export default function InterviewPage() {
             <span className="text-xl font-bold">AI Coding Teacher</span>
           </Link>
           <div className="flex items-center gap-6">
-            <Link href="/problems" className="text-dark-300 hover:text-white transition">题库</Link>
-            <Link href="/interview" className="text-white font-medium">面试</Link>
-            <Link href="/battle" className="text-dark-300 hover:text-white transition">对战</Link>
-            <Link href="/dashboard" className="text-dark-300 hover:text-white transition">仪表盘</Link>
+            <Link href="/problems" className="text-dark-300 hover:text-white transition">Problems</Link>
+            <Link href="/interview" className="text-white font-medium">Interview</Link>
+            <Link href="/battle" className="text-dark-300 hover:text-white transition">Battle</Link>
+            <Link href="/dashboard" className="text-dark-300 hover:text-white transition">Dashboard</Link>
           </div>
         </div>
       </nav>
@@ -140,10 +140,10 @@ export default function InterviewPage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 text-purple-400 text-sm mb-4">
             <Brain className="w-4 h-4" />
-            AI 面试官模拟
+            AI Interviewer Simulation
           </div>
-          <h1 className="text-4xl font-bold mb-4">准备好面试了吗？</h1>
-          <p className="text-dark-400 text-lg">选择你的面试类型，AI 面试官将模拟真实面试场景</p>
+          <h1 className="text-4xl font-bold mb-4">Ready for Your Interview?</h1>
+          <p className="text-dark-400 text-lg">Select your interview type, and the AI interviewer will simulate a real interview scenario</p>
         </div>
 
         {/* Progress Steps */}
@@ -172,7 +172,7 @@ export default function InterviewPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h2 className="text-2xl font-bold mb-6 text-center">选择面试类型</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">Select Interview Type</h2>
             <div className="grid grid-cols-2 gap-4">
               {INTERVIEW_TYPES.map((type) => (
                 <button
@@ -205,7 +205,7 @@ export default function InterviewPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h2 className="text-2xl font-bold mb-6 text-center">选择目标公司</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">Select Target Company</h2>
             <div className="space-y-3">
               {COMPANIES.map((company) => (
                 <button
@@ -238,7 +238,7 @@ export default function InterviewPage() {
               onClick={() => setStep(1)}
               className="mt-6 text-dark-400 hover:text-white transition"
             >
-              ← 返回上一步
+              ← Go Back
             </button>
           </motion.div>
         )}
@@ -249,7 +249,7 @@ export default function InterviewPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h2 className="text-2xl font-bold mb-6 text-center">选择难度</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">Select Difficulty</h2>
             <div className="grid grid-cols-3 gap-4">
               {DIFFICULTIES.map((diff) => (
                 <button
@@ -280,7 +280,7 @@ export default function InterviewPage() {
               onClick={() => setStep(2)}
               className="mt-6 text-dark-400 hover:text-white transition"
             >
-              ← 返回上一步
+              ← Go Back
             </button>
           </motion.div>
         )}
@@ -291,7 +291,7 @@ export default function InterviewPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h2 className="text-2xl font-bold mb-6 text-center">选择时长</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">Select Duration</h2>
             <div className="grid grid-cols-3 gap-4 mb-8">
               {DURATIONS.map((duration) => (
                 <button
@@ -306,36 +306,36 @@ export default function InterviewPage() {
                 >
                   <Clock className="w-8 h-8 mx-auto mb-2 text-dark-300" />
                   <h3 className="text-2xl font-bold">{duration}</h3>
-                  <p className="text-dark-400 text-sm">分钟</p>
+                  <p className="text-dark-400 text-sm">minutes</p>
                 </button>
               ))}
             </div>
 
             {/* Summary */}
             <div className="bg-dark-800 rounded-xl p-6 border border-dark-700 mb-8">
-              <h3 className="font-semibold mb-4">面试配置</h3>
+              <h3 className="font-semibold mb-4">Interview Configuration</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-dark-400">面试类型：</span>
+                  <span className="text-dark-400">Interview Type:</span>
                   <span className="text-white ml-2">
                     {INTERVIEW_TYPES.find(t => t.id === config.interview_type)?.name}
                   </span>
                 </div>
                 <div>
-                  <span className="text-dark-400">目标公司：</span>
+                  <span className="text-dark-400">Target Company:</span>
                   <span className="text-white ml-2">
                     {COMPANIES.find(c => c.id === config.company)?.name}
                   </span>
                 </div>
                 <div>
-                  <span className="text-dark-400">难度：</span>
+                  <span className="text-dark-400">Difficulty:</span>
                   <span className="text-white ml-2">
                     {DIFFICULTIES.find(d => d.id === config.difficulty)?.name}
                   </span>
                 </div>
                 <div>
-                  <span className="text-dark-400">时长：</span>
-                  <span className="text-white ml-2">{config.duration_minutes} 分钟</span>
+                  <span className="text-dark-400">Duration:</span>
+                  <span className="text-white ml-2">{config.duration_minutes} minutes</span>
                 </div>
               </div>
             </div>
@@ -345,7 +345,7 @@ export default function InterviewPage() {
                 onClick={() => setStep(3)}
                 className="text-dark-400 hover:text-white transition"
               >
-                ← 返回上一步
+                ← Go Back
               </button>
               
               <button
@@ -359,7 +359,7 @@ export default function InterviewPage() {
                 )}
               >
                 <Zap className="w-5 h-5" />
-                {isStarting ? '准备中...' : '开始面试'}
+                {isStarting ? 'Preparing...' : 'Start Interview'}
               </button>
             </div>
           </motion.div>

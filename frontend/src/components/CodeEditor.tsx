@@ -94,7 +94,7 @@ export default function CodeEditor({
         className="bg-dark-900 rounded-lg border border-dark-700 flex items-center justify-center"
         style={{ height }}
       >
-        <div className="animate-pulse text-dark-400">加载编辑器...</div>
+        <div className="animate-pulse text-dark-400">Loading editor...</div>
       </div>
     )
   }
@@ -123,7 +123,7 @@ export default function CodeEditor({
               <button
                 onClick={onReset}
                 className="p-2 text-dark-400 hover:text-white hover:bg-dark-700 rounded-lg transition"
-                title="重置代码"
+                title="Reset code"
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
@@ -141,7 +141,7 @@ export default function CodeEditor({
                 )}
               >
                 <Play className="w-4 h-4" />
-                {isRunning ? '运行中...' : '运行'}
+                {isRunning ? 'Running...' : 'Run'}
               </button>
             )}
 
@@ -157,7 +157,7 @@ export default function CodeEditor({
                 )}
               >
                 <Send className="w-4 h-4" />
-                {isSubmitting ? '提交中...' : '提交'}
+                {isSubmitting ? 'Submitting...' : 'Submit'}
               </button>
             )}
           </div>

@@ -47,7 +47,7 @@ export default function ProblemDescription({
         <div className="flex items-center gap-3 mb-2">
           <h1 className="text-2xl font-bold">{problem.title}</h1>
           <span className={cn('px-2 py-0.5 rounded text-sm', getDifficultyBadgeClass(problem.difficulty))}>
-            {problem.difficulty === 'easy' ? '简单' : problem.difficulty === 'medium' ? '中等' : '困难'}
+            {problem.difficulty === 'easy' ? 'Easy' : problem.difficulty === 'medium' ? 'Medium' : 'Hard'}
           </span>
         </div>
         
@@ -55,11 +55,11 @@ export default function ProblemDescription({
         <div className="flex items-center gap-4 text-sm text-dark-400">
           <span className="flex items-center gap-1">
             <Clock className="w-4 h-4" />
-            {problem.acceptance_rate.toFixed(1)}% 通过率
+            {problem.acceptance_rate.toFixed(1)}% Acceptance Rate
           </span>
           <span className="flex items-center gap-1">
             <Database className="w-4 h-4" />
-            {problem.submission_count} 提交
+            {problem.submission_count} Submissions
           </span>
         </div>
       </div>
@@ -73,21 +73,21 @@ export default function ProblemDescription({
 
       {/* Examples */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">示例</h3>
+        <h3 className="text-lg font-semibold">Examples</h3>
         {problem.examples.map((example, i) => (
           <div key={i} className="bg-dark-800 rounded-lg p-4 border border-dark-700">
             <div className="space-y-2">
               <div>
-                <span className="text-dark-400 text-sm">输入：</span>
+                <span className="text-dark-400 text-sm">Input:</span>
                 <code className="block mt-1 text-sm font-mono text-blue-400">{example.input}</code>
               </div>
               <div>
-                <span className="text-dark-400 text-sm">输出：</span>
+                <span className="text-dark-400 text-sm">Output:</span>
                 <code className="block mt-1 text-sm font-mono text-green-400">{example.output}</code>
               </div>
               {example.explanation && (
                 <div>
-                  <span className="text-dark-400 text-sm">解释：</span>
+                  <span className="text-dark-400 text-sm">Explanation:</span>
                   <p className="mt-1 text-sm text-dark-300">{example.explanation}</p>
                 </div>
               )}
@@ -98,7 +98,7 @@ export default function ProblemDescription({
 
       {/* Constraints */}
       <div>
-        <h3 className="text-lg font-semibold mb-3">提示</h3>
+        <h3 className="text-lg font-semibold mb-3">Constraints</h3>
         <ul className="list-disc list-inside space-y-1 text-sm text-dark-300">
           {problem.constraints.map((constraint, i) => (
             <li key={i}>{constraint}</li>
@@ -143,7 +143,7 @@ export default function ProblemDescription({
             className="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition"
           >
             <Lightbulb className="w-5 h-5" />
-            <span>提示 ({currentHintLevel}/3)</span>
+            <span>Hints ({currentHintLevel}/3)</span>
             {showHints ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
@@ -151,7 +151,7 @@ export default function ProblemDescription({
             <div className="mt-4 space-y-3">
               {hints.map((hint, i) => (
                 <div key={i} className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                  <span className="text-yellow-400 font-medium">提示 {i + 1}：</span>
+                  <span className="text-yellow-400 font-medium">Hint {i + 1}:</span>
                   <p className="text-dark-200 mt-1">{hint}</p>
                 </div>
               ))}
@@ -162,7 +162,7 @@ export default function ProblemDescription({
                   disabled={loadingHint}
                   className="text-sm text-yellow-400 hover:text-yellow-300 transition"
                 >
-                  {loadingHint ? '获取中...' : '获取下一个提示'}
+                  {loadingHint ? 'Loading...' : 'Get Next Hint'}
                 </button>
               )}
             </div>
