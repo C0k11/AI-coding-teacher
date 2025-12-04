@@ -1,5 +1,9 @@
 # Cok11 - AI Coding Teacher
 
+<p align="center">
+  <img src="./AI%20Coding%20Teacher.gif" alt="Cok11 Demo" width="800">
+</p>
+
 A modern coding education platform with algorithm problem library, real-time code battles, and knowledge graph visualization. Clean GitHub-style UI with all AI features running locally.
 
 ## Features

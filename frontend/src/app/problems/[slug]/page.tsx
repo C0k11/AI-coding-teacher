@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { 
   ChevronLeft, 
@@ -10,7 +10,9 @@ import {
   CheckCircle, 
   XCircle,
   Terminal,
-  FileText
+  FileText,
+  Trophy,
+  ChevronRight
 } from 'lucide-react'
 import CodeEditor from '@/components/CodeEditor'
 import ProblemDescription from '@/components/ProblemDescription'
@@ -28,7 +30,7 @@ const SAMPLE_PROBLEM: Problem = {
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
 
 You can return the answer in any order.`,
-  difficulty: 'easy',
+  difficulty: 'medium',
   examples: [
     { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]', explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].' },
     { input: 'nums = [3,2,4], target = 6', output: '[1,2]' },
@@ -53,6 +55,11 @@ You can return the answer in any order.`,
     }
 }`,
   },
+  test_cases: [
+    { input: '[2,7,11,15]\n9', expected_output: '[0, 1]' },
+    { input: '[3,2,4]\n6', expected_output: '[1, 2]' },
+    { input: '[3,3]\n6', expected_output: '[0, 1]' },
+  ],
   topics: ['array', 'hash_table'],
   companies: [],
   patterns: ['two_pointers', 'hash_map'],
@@ -69,6 +76,7 @@ type TabType = 'description' | 'output' | 'submissions'
 
 export default function ProblemPage() {
   const params = useParams()
+  const router = useRouter()
   const slug = params.slug as string
   const { token } = useAuthStore()
 
@@ -81,6 +89,13 @@ export default function ProblemPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [testResults, setTestResults] = useState<any>(null)
   const [consoleOutput, setConsoleOutput] = useState('')
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [allProblems, setAllProblems] = useState<any[]>([])
+
+  // Fetch all problems for navigation
+  useEffect(() => {
+    problemsApi.list().then(setAllProblems).catch(() => {})
+  }, [])
 
   // Fetch problem
   useEffect(() => {
@@ -111,17 +126,22 @@ export default function ProblemPage() {
   const handleRun = async () => {
     setIsRunning(true)
     setActiveTab('output')
+    setTestResults(null)
     setConsoleOutput('Running...')
 
     try {
-      const result = await execution.run(code, language, '')
-      if (result.success) {
-        setConsoleOutput(result.output || '(no output)')
-      } else {
-        setConsoleOutput(`Error:\n${result.error}`)
+      // Use test_cases from problem data (first one only for Run)
+      const testCases = problem.test_cases?.slice(0, 1) || []
+      
+      if (testCases.length === 0) {
+        setConsoleOutput('No test cases available')
+        return
       }
-    } catch (error) {
-      setConsoleOutput('Execution failed')
+
+      const result = await execution.test(code, language, testCases)
+      setTestResults(result)
+    } catch (error: any) {
+      setConsoleOutput(`Error: ${error.message || 'Execution failed'}`)
     } finally {
       setIsRunning(false)
     }
@@ -132,14 +152,26 @@ export default function ProblemPage() {
     setActiveTab('output')
 
     try {
-      // Run against test cases
-      const testCases = problem.examples.map((ex) => ({
-        input: ex.input.split(', ').map(s => s.split(' = ')[1]).join('\n'),
-        expected_output: ex.output,
-      }))
+      // Use all test_cases from problem data
+      const testCases = problem.test_cases || []
+      
+      if (testCases.length === 0) {
+        setTestResults({
+          status: 'error',
+          test_results: [],
+          passed_count: 0,
+          total_count: 0,
+        })
+        return
+      }
 
       const result = await execution.test(code, language, testCases)
       setTestResults(result)
+      
+      // Show success modal if all tests passed
+      if (result.status === 'accepted') {
+        setShowSuccess(true)
+      }
     } catch (error) {
       console.error('Submit failed:', error)
       setTestResults({
@@ -150,6 +182,26 @@ export default function ProblemPage() {
       })
     } finally {
       setIsSubmitting(false)
+    }
+  }
+
+  // Get next problem
+  const getNextProblem = () => {
+    const currentIndex = allProblems.findIndex(p => p.slug === slug)
+    if (currentIndex >= 0 && currentIndex < allProblems.length - 1) {
+      return allProblems[currentIndex + 1]
+    }
+    return null
+  }
+
+  const handleNextProblem = () => {
+    const next = getNextProblem()
+    if (next) {
+      setShowSuccess(false)
+      setTestResults(null)
+      router.push(`/problems/${next.slug}`)
+    } else {
+      router.push('/problems')
     }
   }
 
@@ -174,8 +226,51 @@ export default function ProblemPage() {
     )
   }
 
+  const nextProblem = getNextProblem()
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
+      {/* Success Modal */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Trophy className="w-8 h-8 text-emerald-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Congratulations!</h2>
+              <p className="text-slate-500">You solved {problem.title} successfully!</p>
+            </div>
+            
+            <div className="bg-emerald-50 rounded-lg p-4 mb-6">
+              <div className="text-center">
+                <div className="text-emerald-600 font-bold text-lg">All Tests Passed</div>
+                <div className="text-emerald-500 text-sm">{testResults?.passed_count}/{testResults?.total_count} test cases</div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowSuccess(false)}
+                className="flex-1 px-4 py-3 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition font-medium"
+              >
+                Stay Here
+              </button>
+              <button
+                onClick={handleNextProblem}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium"
+              >
+                {nextProblem ? (
+                  <>Next Problem <ChevronRight className="w-4 h-4" /></>
+                ) : (
+                  'Back to Problems'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white border-b border-slate-200">
         <div className="px-4 py-3 flex items-center justify-between">

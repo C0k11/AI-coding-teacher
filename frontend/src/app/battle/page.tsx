@@ -21,18 +21,24 @@ import { useAuthStore, useBattleStore } from '@/store/useStore'
 const BATTLE_MODES = [
   { 
     id: 'quick_match', 
-    name: 'Quick Match', 
-    description: 'Match with opponents of similar skill level',
+    name: 'Quick Battle', 
+    description: 'Fill-in-the-blank & multiple choice code questions',
+    icon: '⚡',
+    time: '2:00',
+  },
+  { 
+    id: 'code_battle', 
+    name: 'Code Battle', 
+    description: 'Race to solve a coding problem 1v1',
+    icon: '⚔️',
+    time: '15:00',
   },
   { 
     id: 'friend_challenge', 
     name: 'Friend Challenge', 
-    description: 'Challenge a friend to a 1v1 battle',
-  },
-  { 
-    id: 'tournament', 
-    name: 'Tournament', 
-    description: 'Join weekly tournaments and compete for ranking',
+    description: 'Challenge a friend to a code battle',
+    icon: '👥',
+    time: '15:00',
   },
 ]
 
@@ -74,13 +80,19 @@ export default function BattlePage() {
     setIsSearching(true)
 
     try {
+      // Quick Battle goes to quiz mode
+      if (selectedMode === 'quick_match') {
+        router.push('/battle/quiz')
+        return
+      }
+
       const mockBattle = {
         battle_id: Date.now(),
         problem: {
           id: 1,
           title: 'Two Sum',
           slug: 'two-sum',
-          difficulty: 'easy',
+          difficulty: 'medium',
           description: 'Given an array of integers nums and an integer target...',
           examples: [{ input: 'nums = [2,7,11,15], target = 9', output: '[0,1]' }],
           starter_code: {
@@ -89,7 +101,7 @@ export default function BattlePage() {
         },
         mode: selectedMode,
         status: 'waiting',
-        opponent: selectedMode === 'quick_match' ? 'Opponent' : null,
+        opponent: selectedMode === 'code_battle' ? 'AI Opponent' : null,
         time_limit_seconds: 900
       }
 
@@ -189,8 +201,12 @@ export default function BattlePage() {
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   )}
                 >
+                  <div className="text-2xl">{mode.icon}</div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-slate-900">{mode.name}</h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-medium text-slate-900">{mode.name}</h3>
+                      <span className="text-xs px-2 py-0.5 bg-slate-100 rounded text-slate-500">{mode.time}</span>
+                    </div>
                     <p className="text-slate-500 text-sm">{mode.description}</p>
                   </div>
                   <ChevronRight className={cn(
@@ -234,18 +250,26 @@ export default function BattlePage() {
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-white rounded-md p-4 border border-slate-200 text-center">
                 <Clock className="w-5 h-5 mx-auto mb-2 text-slate-400" />
-                <div className="text-lg font-bold text-slate-900">15:00</div>
+                <div className="text-lg font-bold text-slate-900">
+                  {BATTLE_MODES.find(m => m.id === selectedMode)?.time}
+                </div>
                 <div className="text-xs text-slate-500">Time Limit</div>
               </div>
               <div className="bg-white rounded-md p-4 border border-slate-200 text-center">
                 <Target className="w-5 h-5 mx-auto mb-2 text-slate-400" />
-                <div className="text-lg font-bold text-slate-900">1v1</div>
-                <div className="text-xs text-slate-500">Battle Mode</div>
+                <div className="text-lg font-bold text-slate-900">
+                  {selectedMode === 'quick_match' ? '5 Qs' : '1v1'}
+                </div>
+                <div className="text-xs text-slate-500">
+                  {selectedMode === 'quick_match' ? 'Questions' : 'Battle Mode'}
+                </div>
               </div>
               <div className="bg-white rounded-md p-4 border border-slate-200 text-center">
                 <Trophy className="w-5 h-5 mx-auto mb-2 text-slate-400" />
-                <div className="text-lg font-bold text-slate-900">+25</div>
-                <div className="text-xs text-slate-500">Win Points</div>
+                <div className="text-lg font-bold text-slate-900">
+                  {selectedMode === 'quick_match' ? '+50' : '+25'}
+                </div>
+                <div className="text-xs text-slate-500">Max Points</div>
               </div>
             </div>
           </div>

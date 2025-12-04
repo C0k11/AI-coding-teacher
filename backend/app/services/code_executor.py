@@ -156,10 +156,45 @@ class CodeExecutor:
         }
     
     def _wrap_code_for_test(self, code: str, language: str, input_data: str) -> str:
-        """Wrap user code to handle input for testing"""
-        # For most cases, we use stdin, so no wrapping needed
-        # But we can add language-specific input handling here if needed
-        return code
+        """Wrap LeetCode-style code to auto-call the Solution class"""
+        if language.lower() not in ["python", "python3"]:
+            return code
+        
+        # Check if code contains a Solution class
+        if "class Solution" not in code:
+            return code
+        
+        # Find the method name in Solution class
+        import re
+        method_match = re.search(r'def\s+(\w+)\s*\(\s*self', code)
+        if not method_match:
+            return code
+        
+        method_name = method_match.group(1)
+        if method_name == "__init__":
+            methods = re.findall(r'def\s+(\w+)\s*\(\s*self', code)
+            method_name = methods[1] if len(methods) > 1 else None
+        
+        if not method_name:
+            return code
+        
+        # Parse input arguments
+        input_data = input_data.strip()
+        if input_data:
+            lines = input_data.split('\n')
+            args_str = ', '.join(lines)
+        else:
+            args_str = ''
+        
+        # Add wrapper code - ensure code ends with newline
+        code = code.rstrip() + '\n'
+        wrapper = f'''{code}
+# Auto-generated test wrapper
+_sol = Solution()
+_result = _sol.{method_name}({args_str})
+print(_result)
+'''
+        return wrapper
     
     def _compare_outputs(self, actual: str, expected: str) -> bool:
         """Compare actual output with expected output"""
@@ -202,19 +237,25 @@ class LocalCodeExecutor:
         import sys
         
         try:
+            # Use stdin only if provided, otherwise don't pass input
+            run_kwargs = {
+                "capture_output": True,
+                "text": True,
+                "timeout": 5
+            }
+            if stdin:
+                run_kwargs["input"] = stdin
+            
             result = subprocess.run(
                 [sys.executable, "-c", code],
-                input=stdin,
-                capture_output=True,
-                text=True,
-                timeout=5
+                **run_kwargs
             )
             
             return {
                 "success": result.returncode == 0,
-                "output": result.stdout.strip(),
-                "stderr": result.stderr.strip(),
-                "error": result.stderr if result.returncode != 0 else ""
+                "output": result.stdout.strip() if result.stdout else "",
+                "stderr": result.stderr.strip() if result.stderr else "",
+                "error": result.stderr.strip() if result.returncode != 0 and result.stderr else ""
             }
         except subprocess.TimeoutExpired:
             return {
@@ -231,6 +272,50 @@ class LocalCodeExecutor:
                 "stderr": ""
             }
     
+    def _wrap_leetcode_code(self, code: str, language: str, input_data: str) -> str:
+        """Wrap LeetCode-style code to auto-call the Solution class"""
+        if language.lower() not in ["python", "python3"]:
+            return code
+        
+        # Check if code contains a Solution class
+        if "class Solution" not in code:
+            return code
+        
+        # Find the method name in Solution class
+        import re
+        method_match = re.search(r'def\s+(\w+)\s*\(\s*self', code)
+        if not method_match:
+            return code
+        
+        method_name = method_match.group(1)
+        if method_name == "__init__":
+            # Find next method
+            methods = re.findall(r'def\s+(\w+)\s*\(\s*self', code)
+            method_name = methods[1] if len(methods) > 1 else None
+        
+        if not method_name:
+            return code
+        
+        # Parse input arguments
+        # Input format: "[2,7,11,15]\n9" -> args = [[2,7,11,15], 9]
+        # Empty input means no arguments
+        input_data = input_data.strip()
+        if input_data:
+            lines = input_data.split('\n')
+            args_str = ', '.join(lines)
+        else:
+            args_str = ''
+        
+        # Add wrapper code - ensure code ends with newline
+        code = code.rstrip() + '\n'
+        wrapper = f'''{code}
+# Auto-generated test wrapper
+_sol = Solution()
+_result = _sol.{method_name}({args_str})
+print(_result)
+'''
+        return wrapper
+    
     async def run_test_cases(
         self,
         code: str,
@@ -246,24 +331,43 @@ class LocalCodeExecutor:
             input_data = test_case.get("input", "")
             expected_output = test_case.get("expected_output", "").strip()
             
-            result = await self.execute(code, language, input_data)
+            # Wrap LeetCode-style code
+            wrapped_code = self._wrap_leetcode_code(code, language, input_data)
+            
+            # Debug: print wrapped code
+            print(f"=== WRAPPED CODE ===\n{wrapped_code}\n=== END ===")
+            
+            result = await self.execute(wrapped_code, language, "")
+            
+            # Debug: print result
+            print(f"=== RESULT === {result}")
+            
             actual_output = result["output"].strip()
-            passed = actual_output == expected_output
+            error_msg = result.get("error", "") or result.get("stderr", "")
+            
+            # If there's an error, show it in actual_output for debugging
+            if error_msg and not actual_output:
+                actual_output = f"(error: {error_msg[:100]})"
+            
+            # Normalize comparison (handle list format differences)
+            passed = self._compare_outputs(actual_output, expected_output) if not error_msg else False
             
             if passed:
                 passed_count += 1
             
             results.append({
                 "test_case": i + 1,
-                "input": input_data,
+                "input": input_data if input_data else "(no input)",
                 "expected_output": expected_output,
-                "actual_output": actual_output,
+                "actual_output": actual_output if actual_output else "(no output)",
                 "passed": passed,
                 "runtime_ms": 0,
-                "error": result.get("error")
+                "error": error_msg if error_msg else None
             })
         
         status = "accepted" if passed_count == len(test_cases) else "wrong_answer"
+        if any(r.get("error") for r in results):
+            status = "runtime_error"
         
         return {
             "status": status,
@@ -271,6 +375,20 @@ class LocalCodeExecutor:
             "passed_count": passed_count,
             "total_count": len(test_cases)
         }
+    
+    def _compare_outputs(self, actual: str, expected: str) -> bool:
+        """Compare outputs with normalization"""
+        def normalize(s):
+            s = s.strip()
+            # Remove all whitespace
+            s = s.replace(" ", "").replace("\t", "")
+            # Normalize quotes
+            s = s.replace("'", '"')
+            # Handle True/False vs true/false
+            s = s.replace("True", "true").replace("False", "false")
+            return s
+        
+        return normalize(actual) == normalize(expected)
 
 
 # Create executor instance

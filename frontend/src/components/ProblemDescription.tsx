@@ -1,12 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, Lightbulb, Tag } from 'lucide-react'
+import { ChevronDown, ChevronUp, Lightbulb, Tag, BookOpen, Clock, Database } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Problem } from '@/lib/api'
 
+interface Solution {
+  approach: string
+  code: string
+  time_complexity: string
+  space_complexity: string
+  explanation: string
+}
+
 interface ProblemDescriptionProps {
-  problem: Problem
+  problem: Problem & { solutions?: Solution[] }
   onGetHint?: (level: number) => Promise<string[]>
   hintsUsed?: number
 }
@@ -20,6 +28,8 @@ export default function ProblemDescription({
   const [hints, setHints] = useState<string[]>([])
   const [loadingHint, setLoadingHint] = useState(false)
   const [currentHintLevel, setCurrentHintLevel] = useState(0)
+  const [showSolutions, setShowSolutions] = useState(false)
+  const [selectedSolution, setSelectedSolution] = useState(0)
 
   const handleGetHint = async () => {
     if (!onGetHint || loadingHint) return
@@ -140,6 +150,77 @@ export default function ProblemDescription({
                 >
                   {loadingHint ? 'Loading...' : 'Get Next Hint'}
                 </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Solutions */}
+      {problem.solutions && problem.solutions.length > 0 && (
+        <div className="border-t border-slate-200 pt-4">
+          <button
+            onClick={() => setShowSolutions(!showSolutions)}
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition"
+          >
+            <BookOpen className="w-5 h-5" />
+            <span className="font-medium">Solutions ({problem.solutions.length})</span>
+            {showSolutions ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+
+          {showSolutions && (
+            <div className="mt-4 space-y-4">
+              {/* Solution tabs */}
+              {problem.solutions.length > 1 && (
+                <div className="flex gap-2 flex-wrap">
+                  {problem.solutions.map((sol, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedSolution(i)}
+                      className={cn(
+                        'px-3 py-1.5 rounded text-sm font-medium transition',
+                        selectedSolution === i
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      )}
+                    >
+                      {sol.approach}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Selected solution */}
+              {problem.solutions[selectedSolution] && (
+                <div className="space-y-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                    <h4 className="text-blue-800 font-semibold mb-2">
+                      {problem.solutions[selectedSolution].approach}
+                    </h4>
+                    <p className="text-slate-700 text-sm mb-3">
+                      {problem.solutions[selectedSolution].explanation}
+                    </p>
+                    
+                    {/* Complexity */}
+                    <div className="flex gap-4 text-sm mb-3">
+                      <div className="flex items-center gap-1.5 text-slate-600">
+                        <Clock className="w-4 h-4" />
+                        <span>Time: <code className="text-blue-600">{problem.solutions[selectedSolution].time_complexity}</code></span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-slate-600">
+                        <Database className="w-4 h-4" />
+                        <span>Space: <code className="text-blue-600">{problem.solutions[selectedSolution].space_complexity}</code></span>
+                      </div>
+                    </div>
+
+                    {/* Code */}
+                    <div className="bg-slate-900 rounded-md p-4 overflow-x-auto">
+                      <pre className="text-sm text-slate-100 font-mono whitespace-pre">
+                        {problem.solutions[selectedSolution].code}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           )}

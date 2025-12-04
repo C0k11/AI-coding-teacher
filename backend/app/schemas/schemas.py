@@ -80,6 +80,14 @@ class ProblemListItem(BaseModel):
         from_attributes = True
 
 
+class ProblemSolution(BaseModel):
+    approach: str
+    code: str
+    time_complexity: str
+    space_complexity: str
+    explanation: str
+
+
 class ProblemDetail(BaseModel):
     id: int
     title: str
@@ -93,6 +101,8 @@ class ProblemDetail(BaseModel):
     companies: List[str]
     patterns: List[str]
     hints: List[str]
+    solutions: List[ProblemSolution]
+    test_cases: List[Dict[str, Any]]
     acceptance_rate: float
 
     class Config:

@@ -5,21 +5,272 @@ Seed database with sample problems
 from app.models.database import init_db, SessionLocal, Problem
 
 SAMPLE_PROBLEMS = [
+    # ============== EASY - Fundamentals ==============
+    {
+        "title": "Hello World",
+        "slug": "hello-world",
+        "description": """Write a function that returns the string "Hello, World!".""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "(no input)", "output": "Hello, World!", "explanation": "Simply return the greeting string."}
+        ],
+        "constraints": ["Return exactly 'Hello, World!' with correct capitalization and punctuation."],
+        "starter_code": {
+            "python": "class Solution:\n    def helloWorld(self) -> str:\n        pass",
+            "javascript": "var helloWorld = function() {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "", "expected_output": "Hello, World!"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["string", "basics"],
+        "companies": [],
+        "patterns": ["basics"],
+        "hints": ["Just return a string literal."],
+        "solutions": [
+            {
+                "approach": "Direct Return",
+                "code": "class Solution:\n    def helloWorld(self) -> str:\n        return 'Hello, World!'",
+                "time_complexity": "O(1)",
+                "space_complexity": "O(1)",
+                "explanation": "Simply return the string literal."
+            }
+        ],
+        "time_complexity": "O(1)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Add Two Numbers",
+        "slug": "add-two-integers",
+        "description": """Given two integers num1 and num2, return their sum.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "num1 = 12, num2 = 5", "output": "17", "explanation": "12 + 5 = 17"},
+            {"input": "num1 = -10, num2 = 4", "output": "-6", "explanation": "-10 + 4 = -6"}
+        ],
+        "constraints": ["-100 <= num1, num2 <= 100"],
+        "starter_code": {
+            "python": "class Solution:\n    def sum(self, num1: int, num2: int) -> int:\n        pass",
+            "javascript": "var sum = function(num1, num2) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "12\n5", "expected_output": "17"},
+            {"input": "-10\n4", "expected_output": "-6"}
+        ],
+        "hidden_test_cases": [
+            {"input": "0\n0", "expected_output": "0"}
+        ],
+        "topics": ["math", "basics"],
+        "companies": [],
+        "patterns": ["basics"],
+        "hints": ["Use the + operator."],
+        "solutions": [
+            {
+                "approach": "Addition",
+                "code": "class Solution:\n    def sum(self, num1: int, num2: int) -> int:\n        return num1 + num2",
+                "time_complexity": "O(1)",
+                "space_complexity": "O(1)",
+                "explanation": "Use the addition operator to add the two numbers."
+            }
+        ],
+        "time_complexity": "O(1)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Find Maximum",
+        "slug": "find-maximum",
+        "description": """Given an array of integers nums, return the maximum value in the array.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "nums = [3, 1, 4, 1, 5, 9]", "output": "9", "explanation": "9 is the largest number."},
+            {"input": "nums = [-5, -2, -10]", "output": "-2", "explanation": "-2 is the largest among negative numbers."}
+        ],
+        "constraints": ["1 <= nums.length <= 100", "-1000 <= nums[i] <= 1000"],
+        "starter_code": {
+            "python": "class Solution:\n    def findMax(self, nums: list[int]) -> int:\n        pass",
+            "javascript": "var findMax = function(nums) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[3, 1, 4, 1, 5, 9]", "expected_output": "9"},
+            {"input": "[-5, -2, -10]", "expected_output": "-2"}
+        ],
+        "hidden_test_cases": [
+            {"input": "[42]", "expected_output": "42"}
+        ],
+        "topics": ["array", "basics"],
+        "companies": [],
+        "patterns": ["iteration"],
+        "hints": [
+            "You can use a built-in function like max().",
+            "Or iterate through the array keeping track of the largest value seen."
+        ],
+        "solutions": [
+            {
+                "approach": "Built-in Function",
+                "code": "class Solution:\n    def findMax(self, nums: list[int]) -> int:\n        return max(nums)",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Use Python's built-in max() function."
+            },
+            {
+                "approach": "Loop",
+                "code": "class Solution:\n    def findMax(self, nums: list[int]) -> int:\n        result = nums[0]\n        for num in nums:\n            if num > result:\n                result = num\n        return result",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Iterate through the array and keep track of the maximum."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Reverse String",
+        "slug": "reverse-string",
+        "description": """Given a string s, return the string reversed.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": 's = "hello"', "output": '"olleh"', "explanation": "Reverse the characters."},
+            {"input": 's = "Python"', "output": '"nohtyP"', "explanation": ""}
+        ],
+        "constraints": ["1 <= s.length <= 1000"],
+        "starter_code": {
+            "python": "class Solution:\n    def reverseString(self, s: str) -> str:\n        pass",
+            "javascript": "var reverseString = function(s) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "hello", "expected_output": "olleh"},
+            {"input": "Python", "expected_output": "nohtyP"}
+        ],
+        "hidden_test_cases": [
+            {"input": "a", "expected_output": "a"}
+        ],
+        "topics": ["string", "basics"],
+        "companies": [],
+        "patterns": ["basics"],
+        "hints": [
+            "Python has slicing: s[::-1]",
+            "Or use a loop to build the reversed string."
+        ],
+        "solutions": [
+            {
+                "approach": "Slicing",
+                "code": "class Solution:\n    def reverseString(self, s: str) -> str:\n        return s[::-1]",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(n)",
+                "explanation": "Use Python's slice notation with step -1 to reverse."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(n)"
+    },
+    {
+        "title": "Count Even Numbers",
+        "slug": "count-even-numbers",
+        "description": """Given an array of integers nums, return the count of even numbers.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "nums = [1, 2, 3, 4, 5, 6]", "output": "3", "explanation": "2, 4, 6 are even."},
+            {"input": "nums = [1, 3, 5]", "output": "0", "explanation": "No even numbers."}
+        ],
+        "constraints": ["1 <= nums.length <= 100", "-100 <= nums[i] <= 100"],
+        "starter_code": {
+            "python": "class Solution:\n    def countEvens(self, nums: list[int]) -> int:\n        pass",
+            "javascript": "var countEvens = function(nums) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1, 2, 3, 4, 5, 6]", "expected_output": "3"},
+            {"input": "[1, 3, 5]", "expected_output": "0"}
+        ],
+        "hidden_test_cases": [
+            {"input": "[0, 2, 4]", "expected_output": "3"}
+        ],
+        "topics": ["array", "basics"],
+        "companies": [],
+        "patterns": ["iteration"],
+        "hints": [
+            "A number is even if num % 2 == 0.",
+            "Use a counter variable or list comprehension."
+        ],
+        "solutions": [
+            {
+                "approach": "Loop",
+                "code": "class Solution:\n    def countEvens(self, nums: list[int]) -> int:\n        count = 0\n        for num in nums:\n            if num % 2 == 0:\n                count += 1\n        return count",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Iterate through array and count numbers divisible by 2."
+            },
+            {
+                "approach": "List Comprehension",
+                "code": "class Solution:\n    def countEvens(self, nums: list[int]) -> int:\n        return sum(1 for num in nums if num % 2 == 0)",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Use generator expression with sum."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "FizzBuzz",
+        "slug": "fizzbuzz",
+        "description": """Given an integer n, return a list of strings where:
+- "FizzBuzz" if i is divisible by 3 and 5
+- "Fizz" if i is divisible by 3
+- "Buzz" if i is divisible by 5
+- The number as a string otherwise
+
+for each i from 1 to n.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "n = 5", "output": '["1", "2", "Fizz", "4", "Buzz"]', "explanation": "3 is divisible by 3, 5 is divisible by 5."},
+            {"input": "n = 15", "output": '["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"]', "explanation": "15 is divisible by both 3 and 5."}
+        ],
+        "constraints": ["1 <= n <= 100"],
+        "starter_code": {
+            "python": "class Solution:\n    def fizzBuzz(self, n: int) -> list[str]:\n        pass",
+            "javascript": "var fizzBuzz = function(n) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "5", "expected_output": "['1', '2', 'Fizz', '4', 'Buzz']"},
+            {"input": "3", "expected_output": "['1', '2', 'Fizz']"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "string", "basics"],
+        "companies": [],
+        "patterns": ["iteration"],
+        "hints": [
+            "Check divisibility by 15 first (or both 3 and 5).",
+            "Use the modulo operator %."
+        ],
+        "solutions": [
+            {
+                "approach": "Conditional Checks",
+                "code": "class Solution:\n    def fizzBuzz(self, n: int) -> list[str]:\n        result = []\n        for i in range(1, n + 1):\n            if i % 15 == 0:\n                result.append('FizzBuzz')\n            elif i % 3 == 0:\n                result.append('Fizz')\n            elif i % 5 == 0:\n                result.append('Buzz')\n            else:\n                result.append(str(i))\n        return result",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(n)",
+                "explanation": "Check each number for divisibility and append appropriate string."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(n)"
+    },
+    
+    # ============== MEDIUM - Algorithms ==============
     {
         "title": "Two Sum",
         "slug": "two-sum",
-        "description": """给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出和为目标值 target 的那两个整数，并返回它们的数组下标。
+        "description": """Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 
-你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
 
-你可以按任意顺序返回答案。""",
-        "difficulty": "easy",
+You can return the answer in any order.""",
+        "difficulty": "medium",
         "examples": [
-            {"input": "nums = [2,7,11,15], target = 9", "output": "[0,1]", "explanation": "因为 nums[0] + nums[1] == 9，返回 [0, 1]。"},
+            {"input": "nums = [2,7,11,15], target = 9", "output": "[0,1]", "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."},
             {"input": "nums = [3,2,4], target = 6", "output": "[1,2]", "explanation": ""},
             {"input": "nums = [3,3], target = 6", "output": "[0,1]", "explanation": ""}
         ],
-        "constraints": ["2 <= nums.length <= 10^4", "-10^9 <= nums[i] <= 10^9", "-10^9 <= target <= 10^9", "只会存在一个有效答案"],
+        "constraints": ["2 <= nums.length <= 10^4", "-10^9 <= nums[i] <= 10^9", "-10^9 <= target <= 10^9", "Only one valid answer exists."],
         "starter_code": {
             "python": "class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        pass",
             "javascript": "/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    \n};",
@@ -38,24 +289,24 @@ SAMPLE_PROBLEMS = [
         "companies": ["google", "amazon", "meta", "microsoft"],
         "patterns": ["two_pointers", "hash_map"],
         "hints": [
-            "可以使用暴力法，遍历每对数字检查它们的和",
-            "考虑使用哈希表来优化查找时间",
-            "遍历数组时，对于每个元素，检查 target - nums[i] 是否在哈希表中"
+            "A brute force approach would iterate through each pair to check their sum.",
+            "Consider using a hash table to optimize lookup time.",
+            "While iterating, for each element check if target - nums[i] exists in the hash table."
         ],
         "solutions": [
             {
-                "approach": "暴力法",
+                "approach": "Brute Force",
                 "code": "class Solution:\n    def twoSum(self, nums, target):\n        for i in range(len(nums)):\n            for j in range(i + 1, len(nums)):\n                if nums[i] + nums[j] == target:\n                    return [i, j]",
                 "time_complexity": "O(n²)",
                 "space_complexity": "O(1)",
-                "explanation": "使用两层循环检查所有数字对"
+                "explanation": "Use two nested loops to check all pairs of numbers."
             },
             {
-                "approach": "哈希表",
+                "approach": "Hash Table",
                 "code": "class Solution:\n    def twoSum(self, nums, target):\n        seen = {}\n        for i, num in enumerate(nums):\n            complement = target - num\n            if complement in seen:\n                return [seen[complement], i]\n            seen[num] = i",
                 "time_complexity": "O(n)",
                 "space_complexity": "O(n)",
-                "explanation": "使用哈希表存储已遍历的数字及其索引，一次遍历即可找到答案"
+                "explanation": "Use a hash table to store visited numbers and their indices, finding the answer in a single pass."
             }
         ],
         "time_complexity": "O(n)",
@@ -64,19 +315,19 @@ SAMPLE_PROBLEMS = [
     {
         "title": "Valid Parentheses",
         "slug": "valid-parentheses",
-        "description": """给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+        "description": """Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
 
-有效字符串需满足：
-1. 左括号必须用相同类型的右括号闭合。
-2. 左括号必须以正确的顺序闭合。
-3. 每个右括号都有一个对应的相同类型的左括号。""",
-        "difficulty": "easy",
+An input string is valid if:
+1. Open brackets must be closed by the same type of brackets.
+2. Open brackets must be closed in the correct order.
+3. Every close bracket has a corresponding open bracket of the same type.""",
+        "difficulty": "medium",
         "examples": [
             {"input": 's = "()"', "output": "true", "explanation": ""},
             {"input": 's = "()[]{}"', "output": "true", "explanation": ""},
             {"input": 's = "(]"', "output": "false", "explanation": ""}
         ],
-        "constraints": ["1 <= s.length <= 10^4", "s 仅由括号 '()[]{}' 组成"],
+        "constraints": ["1 <= s.length <= 10^4", "s consists of parentheses only '()[]{}'"],
         "starter_code": {
             "python": "class Solution:\n    def isValid(self, s: str) -> bool:\n        pass",
             "javascript": "/**\n * @param {string} s\n * @return {boolean}\n */\nvar isValid = function(s) {\n    \n};"
@@ -94,16 +345,16 @@ SAMPLE_PROBLEMS = [
         "companies": ["google", "amazon", "meta"],
         "patterns": ["stack"],
         "hints": [
-            "使用栈来跟踪左括号",
-            "遇到右括号时，检查栈顶是否是匹配的左括号"
+            "Use a stack to keep track of opening brackets.",
+            "When encountering a closing bracket, check if the top of the stack is the matching opening bracket."
         ],
         "solutions": [
             {
-                "approach": "栈",
+                "approach": "Stack",
                 "code": "class Solution:\n    def isValid(self, s):\n        stack = []\n        mapping = {')': '(', '}': '{', ']': '['}\n        for char in s:\n            if char in mapping:\n                if not stack or stack.pop() != mapping[char]:\n                    return False\n            else:\n                stack.append(char)\n        return len(stack) == 0",
                 "time_complexity": "O(n)",
                 "space_complexity": "O(n)",
-                "explanation": "使用栈存储左括号，遇到右括号时检查是否匹配"
+                "explanation": "Use a stack to store opening brackets, and check for matches when encountering closing brackets."
             }
         ],
         "time_complexity": "O(n)",
@@ -112,23 +363,23 @@ SAMPLE_PROBLEMS = [
     {
         "title": "LRU Cache",
         "slug": "lru-cache",
-        "description": """请你设计并实现一个满足 LRU (最近最少使用) 缓存约束的数据结构。
+        "description": """Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
 
-实现 LRUCache 类：
-- LRUCache(int capacity) 以正整数作为容量 capacity 初始化 LRU 缓存
-- int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。
-- void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该逐出最久未使用的关键字。
+Implement the LRUCache class:
+- LRUCache(int capacity) Initialize the LRU cache with positive size capacity.
+- int get(int key) Return the value of the key if the key exists, otherwise return -1.
+- void put(int key, int value) Update the value of the key if the key exists. Otherwise, add the key-value pair to the cache. If the number of keys exceeds the capacity from this operation, evict the least recently used key.
 
-函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。""",
-        "difficulty": "medium",
+The functions get and put must each run in O(1) average time complexity.""",
+        "difficulty": "hard",
         "examples": [
             {
                 "input": '["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]\n[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]',
                 "output": "[null, null, null, 1, null, -1, null, -1, 3, 4]",
-                "explanation": "LRUCache lRUCache = new LRUCache(2);\nlRUCache.put(1, 1); // 缓存是 {1=1}\nlRUCache.put(2, 2); // 缓存是 {1=1, 2=2}\nlRUCache.get(1);    // 返回 1\nlRUCache.put(3, 3); // 该操作会使得关键字 2 作废，缓存是 {1=1, 3=3}\nlRUCache.get(2);    // 返回 -1 (未找到)\nlRUCache.put(4, 4); // 该操作会使得关键字 1 作废，缓存是 {4=4, 3=3}\nlRUCache.get(1);    // 返回 -1 (未找到)\nlRUCache.get(3);    // 返回 3\nlRUCache.get(4);    // 返回 4"
+                "explanation": "LRUCache lRUCache = new LRUCache(2);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.put(2, 2); // cache is {1=1, 2=2}\nlRUCache.get(1);    // return 1\nlRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}\nlRUCache.get(2);    // returns -1 (not found)\nlRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}\nlRUCache.get(1);    // return -1 (not found)\nlRUCache.get(3);    // return 3\nlRUCache.get(4);    // return 4"
             }
         ],
-        "constraints": ["1 <= capacity <= 3000", "0 <= key <= 10^4", "0 <= value <= 10^5", "最多调用 2 * 10^5 次 get 和 put"],
+        "constraints": ["1 <= capacity <= 3000", "0 <= key <= 10^4", "0 <= value <= 10^5", "At most 2 * 10^5 calls will be made to get and put."],
         "starter_code": {
             "python": "class LRUCache:\n\n    def __init__(self, capacity: int):\n        pass\n\n    def get(self, key: int) -> int:\n        pass\n\n    def put(self, key: int, value: int) -> None:\n        pass",
             "javascript": "/**\n * @param {number} capacity\n */\nvar LRUCache = function(capacity) {\n    \n};\n\n/** \n * @param {number} key\n * @return {number}\n */\nLRUCache.prototype.get = function(key) {\n    \n};\n\n/** \n * @param {number} key \n * @param {number} value\n * @return {void}\n */\nLRUCache.prototype.put = function(key, value) {\n    \n};"
@@ -141,17 +392,17 @@ SAMPLE_PROBLEMS = [
         "companies": ["google", "amazon", "meta", "microsoft"],
         "patterns": ["hash_map", "doubly_linked_list"],
         "hints": [
-            "需要同时使用哈希表和双向链表",
-            "哈希表用于O(1)查找，双向链表用于维护访问顺序",
-            "get和put操作后，需要将节点移到链表头部"
+            "You need to use both a hash table and a doubly linked list.",
+            "Hash table for O(1) lookup, doubly linked list to maintain access order.",
+            "After get and put operations, move the node to the head of the list."
         ],
         "solutions": [
             {
-                "approach": "哈希表 + 双向链表",
+                "approach": "Hash Table + Doubly Linked List",
                 "code": "class ListNode:\n    def __init__(self, key=0, val=0):\n        self.key = key\n        self.val = val\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.cache = {}\n        self.head = ListNode()\n        self.tail = ListNode()\n        self.head.next = self.tail\n        self.tail.prev = self.head\n    \n    def _remove(self, node):\n        node.prev.next = node.next\n        node.next.prev = node.prev\n    \n    def _add_to_head(self, node):\n        node.next = self.head.next\n        node.prev = self.head\n        self.head.next.prev = node\n        self.head.next = node\n    \n    def get(self, key):\n        if key in self.cache:\n            node = self.cache[key]\n            self._remove(node)\n            self._add_to_head(node)\n            return node.val\n        return -1\n    \n    def put(self, key, value):\n        if key in self.cache:\n            node = self.cache[key]\n            node.val = value\n            self._remove(node)\n            self._add_to_head(node)\n        else:\n            if len(self.cache) >= self.capacity:\n                lru = self.tail.prev\n                self._remove(lru)\n                del self.cache[lru.key]\n            node = ListNode(key, value)\n            self.cache[key] = node\n            self._add_to_head(node)",
                 "time_complexity": "O(1)",
                 "space_complexity": "O(capacity)",
-                "explanation": "使用哈希表存储键到节点的映射，双向链表维护访问顺序。最近访问的节点在链表头部，最久未访问的在尾部。"
+                "explanation": "Use a hash table to map keys to nodes, and a doubly linked list to maintain access order. Most recently accessed nodes are at the head, least recently used at the tail."
             }
         ],
         "time_complexity": "O(1)",
@@ -160,12 +411,12 @@ SAMPLE_PROBLEMS = [
     {
         "title": "Maximum Subarray",
         "slug": "maximum-subarray",
-        "description": """给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+        "description": """Given an integer array nums, find the subarray with the largest sum, and return its sum.
 
-子数组是数组中的一个连续部分。""",
+A subarray is a contiguous non-empty sequence of elements within an array.""",
         "difficulty": "medium",
         "examples": [
-            {"input": "nums = [-2,1,-3,4,-1,2,1,-5,4]", "output": "6", "explanation": "连续子数组 [4,-1,2,1] 的和最大，为 6。"},
+            {"input": "nums = [-2,1,-3,4,-1,2,1,-5,4]", "output": "6", "explanation": "The subarray [4,-1,2,1] has the largest sum 6."},
             {"input": "nums = [1]", "output": "1", "explanation": ""},
             {"input": "nums = [5,4,-1,7,8]", "output": "23", "explanation": ""}
         ],
@@ -187,17 +438,17 @@ SAMPLE_PROBLEMS = [
         "companies": ["google", "amazon", "microsoft"],
         "patterns": ["kadane", "dp"],
         "hints": [
-            "考虑动态规划：dp[i]表示以nums[i]结尾的最大子数组和",
-            "状态转移：dp[i] = max(dp[i-1] + nums[i], nums[i])",
-            "可以优化空间复杂度到O(1)"
+            "Consider dynamic programming: dp[i] represents the maximum subarray sum ending at nums[i].",
+            "State transition: dp[i] = max(dp[i-1] + nums[i], nums[i])",
+            "You can optimize space complexity to O(1)."
         ],
         "solutions": [
             {
-                "approach": "Kadane算法",
+                "approach": "Kadane's Algorithm",
                 "code": "class Solution:\n    def maxSubArray(self, nums):\n        max_sum = current_sum = nums[0]\n        for num in nums[1:]:\n            current_sum = max(num, current_sum + num)\n            max_sum = max(max_sum, current_sum)\n        return max_sum",
                 "time_complexity": "O(n)",
                 "space_complexity": "O(1)",
-                "explanation": "维护当前子数组和和最大子数组和。如果当前和变为负数，则重新开始计数。"
+                "explanation": "Maintain current subarray sum and maximum subarray sum. If current sum becomes negative, start a new subarray."
             }
         ],
         "time_complexity": "O(n)",
@@ -206,14 +457,14 @@ SAMPLE_PROBLEMS = [
     {
         "title": "Binary Tree Level Order Traversal",
         "slug": "binary-tree-level-order-traversal",
-        "description": """给你二叉树的根节点 root ，返回其节点值的层序遍历。（即逐层地，从左到右访问所有节点）。""",
+        "description": """Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).""",
         "difficulty": "medium",
         "examples": [
             {"input": "root = [3,9,20,null,null,15,7]", "output": "[[3],[9,20],[15,7]]", "explanation": ""},
             {"input": "root = [1]", "output": "[[1]]", "explanation": ""},
             {"input": "root = []", "output": "[]", "explanation": ""}
         ],
-        "constraints": ["树中节点数目在范围 [0, 2000] 内", "-1000 <= Node.val <= 1000"],
+        "constraints": ["The number of nodes in the tree is in the range [0, 2000].", "-1000 <= Node.val <= 1000"],
         "starter_code": {
             "python": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\n\nclass Solution:\n    def levelOrder(self, root) -> list[list[int]]:\n        pass",
             "javascript": "/**\n * Definition for a binary tree node.\n * function TreeNode(val, left, right) {\n *     this.val = (val===undefined ? 0 : val)\n *     this.left = (left===undefined ? null : left)\n *     this.right = (right===undefined ? null : right)\n * }\n */\n/**\n * @param {TreeNode} root\n * @return {number[][]}\n */\nvar levelOrder = function(root) {\n    \n};"
@@ -226,9 +477,9 @@ SAMPLE_PROBLEMS = [
         "companies": ["google", "amazon", "meta"],
         "patterns": ["bfs", "level_order"],
         "hints": [
-            "使用BFS（广度优先搜索）",
-            "使用队列存储每一层的节点",
-            "每次处理一层的所有节点"
+            "Use BFS (Breadth-First Search).",
+            "Use a queue to store nodes at each level.",
+            "Process all nodes at one level before moving to the next."
         ],
         "solutions": [
             {
@@ -236,7 +487,7 @@ SAMPLE_PROBLEMS = [
                 "code": "from collections import deque\n\nclass Solution:\n    def levelOrder(self, root):\n        if not root:\n            return []\n        \n        result = []\n        queue = deque([root])\n        \n        while queue:\n            level_size = len(queue)\n            level = []\n            \n            for _ in range(level_size):\n                node = queue.popleft()\n                level.append(node.val)\n                \n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            \n            result.append(level)\n        \n        return result",
                 "time_complexity": "O(n)",
                 "space_complexity": "O(n)",
-                "explanation": "使用队列进行BFS，每次处理一层的所有节点"
+                "explanation": "Use a queue for BFS, processing all nodes at each level before moving to the next."
             }
         ],
         "time_complexity": "O(n)",

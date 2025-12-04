@@ -77,6 +77,14 @@ export const auth = {
 
 // ============== Problems ==============
 
+export interface ProblemSolution {
+  approach: string
+  code: string
+  time_complexity: string
+  space_complexity: string
+  explanation: string
+}
+
 export interface Problem {
   id: number
   title: string
@@ -90,6 +98,8 @@ export interface Problem {
   companies: string[]
   patterns: string[]
   hints: string[]
+  solutions?: ProblemSolution[]
+  test_cases?: Array<{ input: string; expected_output: string }>
   acceptance_rate: number
   submission_count: number
 }
