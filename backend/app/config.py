@@ -19,17 +19,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
     
-    # AI Services
-    OPENAI_API_KEY: str = ""
-    ANTHROPIC_API_KEY: str = ""
-    
-    # Code Execution
-    JUDGE0_API_URL: str = "https://judge0-ce.p.rapidapi.com"
-    JUDGE0_API_KEY: str = ""
+    # Code Execution (Piston API - free, no key required)
     PISTON_API_URL: str = "https://emkc.org/api/v2/piston"
     
-    # Redis
+    # Redis (optional, for caching)
     REDIS_URL: str = "redis://localhost:6379"
+    USE_REDIS: bool = False
     
     class Config:
         env_file = ".env"

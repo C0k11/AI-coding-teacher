@@ -2,248 +2,179 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { 
-  Search, 
-  Filter, 
-  CheckCircle, 
-  Circle,
-  ChevronRight,
-  Code2,
-  Building2,
-  Tag
-} from 'lucide-react'
-import { cn, getDifficultyBadgeClass } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
+import { Search, Circle, User, LogOut } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { problems as problemsApi, type ProblemListItem } from '@/lib/api'
 
-// Sample data for demo
 const SAMPLE_PROBLEMS: ProblemListItem[] = [
-  { id: 1, title: 'Two Sum', slug: 'two-sum', difficulty: 'easy', topics: ['array', 'hash_table'], companies: ['google', 'amazon'], acceptance_rate: 48.2, submission_count: 15234 },
-  { id: 2, title: 'Valid Parentheses', slug: 'valid-parentheses', difficulty: 'easy', topics: ['string', 'stack'], companies: ['google', 'meta'], acceptance_rate: 42.8, submission_count: 12456 },
-  { id: 3, title: 'LRU Cache', slug: 'lru-cache', difficulty: 'medium', topics: ['hash_table', 'linked_list'], companies: ['google', 'amazon', 'meta'], acceptance_rate: 35.6, submission_count: 8932 },
-  { id: 4, title: 'Maximum Subarray', slug: 'maximum-subarray', difficulty: 'medium', topics: ['array', 'dp'], companies: ['google', 'microsoft'], acceptance_rate: 52.1, submission_count: 18234 },
-  { id: 5, title: 'Binary Tree Level Order Traversal', slug: 'binary-tree-level-order-traversal', difficulty: 'medium', topics: ['tree', 'bfs'], companies: ['google', 'meta'], acceptance_rate: 58.3, submission_count: 9876 },
+  { id: 1, title: 'Two Sum', slug: 'two-sum', difficulty: 'easy', topics: ['array', 'hash_table'], companies: [], acceptance_rate: 48.2, submission_count: 0 },
+  { id: 2, title: 'Valid Parentheses', slug: 'valid-parentheses', difficulty: 'easy', topics: ['string', 'stack'], companies: [], acceptance_rate: 42.8, submission_count: 0 },
+  { id: 3, title: 'LRU Cache', slug: 'lru-cache', difficulty: 'medium', topics: ['hash_table', 'linked_list'], companies: [], acceptance_rate: 35.6, submission_count: 0 },
+  { id: 4, title: 'Maximum Subarray', slug: 'maximum-subarray', difficulty: 'medium', topics: ['array', 'dp'], companies: [], acceptance_rate: 52.1, submission_count: 0 },
+  { id: 5, title: 'Binary Tree Level Order Traversal', slug: 'binary-tree-level-order-traversal', difficulty: 'medium', topics: ['tree', 'bfs'], companies: [], acceptance_rate: 58.3, submission_count: 0 },
+]
+
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/problems', label: 'Problems' },
+  { href: '/battle', label: 'Battle' },
 ]
 
 export default function ProblemsPage() {
+  const router = useRouter()
   const [problems, setProblems] = useState<ProblemListItem[]>(SAMPLE_PROBLEMS)
   const [loading, setLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [difficulty, setDifficulty] = useState<string>('')
-  const [topic, setTopic] = useState<string>('')
-  const [company, setCompany] = useState<string>('')
+  const [user, setUser] = useState<{ name: string } | null>(null)
 
-  // Fetch problems from API
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user')
+    if (savedUser) {
+      try { setUser(JSON.parse(savedUser)) } catch {}
+    }
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    setUser(null)
+    router.refresh()
+  }
+
   useEffect(() => {
     const fetchProblems = async () => {
       setLoading(true)
       try {
-        const data = await problemsApi.list({
-          difficulty: difficulty || undefined,
-          topic: topic || undefined,
-          company: company || undefined,
-          search: searchQuery || undefined,
-        })
-        if (data.length > 0) {
-          setProblems(data)
-        }
+        const data = await problemsApi.list({ difficulty: difficulty || undefined, search: searchQuery || undefined })
+        if (data.length > 0) setProblems(data)
       } catch (error) {
         console.error('Failed to fetch problems:', error)
-        // Keep sample data on error
       } finally {
         setLoading(false)
       }
     }
-
     fetchProblems()
-  }, [difficulty, topic, company, searchQuery])
+  }, [difficulty, searchQuery])
 
   const filteredProblems = problems.filter((problem) => {
-    if (searchQuery && !problem.title.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false
-    }
-    if (difficulty && problem.difficulty !== difficulty) {
-      return false
-    }
-    if (topic && !problem.topics.includes(topic)) {
-      return false
-    }
-    if (company && !problem.companies.includes(company)) {
-      return false
-    }
+    if (searchQuery && !problem.title.toLowerCase().includes(searchQuery.toLowerCase())) return false
+    if (difficulty && problem.difficulty !== difficulty) return false
     return true
   })
 
-  const stats = {
-    total: problems.length,
-    easy: problems.filter(p => p.difficulty === 'easy').length,
-    medium: problems.filter(p => p.difficulty === 'medium').length,
-    hard: problems.filter(p => p.difficulty === 'hard').length,
-  }
-
   return (
-    <div className="min-h-screen bg-dark-900">
+    <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-dark-700">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-              <Code2 className="w-6 h-6 text-white" />
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-slate-200">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="text-xl font-bold">
+              <span className="text-slate-900">Cok</span>
+              <span className="text-blue-600">11</span>
+            </Link>
+            <div className="flex items-center gap-6">
+              {navItems.map((item) => (
+                <Link key={item.href} href={item.href} className={cn(
+                  "font-medium transition-colors",
+                  item.href === '/problems' ? "text-slate-900" : "text-slate-600 hover:text-slate-900"
+                )}>
+                  {item.label}
+                </Link>
+              ))}
             </div>
-            <span className="text-xl font-bold">AI Coding Teacher</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/problems" className="text-white font-medium">题库</Link>
-            <Link href="/interview" className="text-dark-300 hover:text-white transition">面试</Link>
-            <Link href="/battle" className="text-dark-300 hover:text-white transition">对战</Link>
-            <Link href="/dashboard" className="text-dark-300 hover:text-white transition">仪表盘</Link>
+            <div className="flex items-center gap-4">
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-700 font-medium flex items-center gap-2">
+                    <User className="w-4 h-4" /> {user.name}
+                  </span>
+                  <button onClick={handleLogout} className="text-slate-500 hover:text-slate-700">
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <Link href="/login" className="px-4 py-2 bg-slate-900 text-white rounded-md font-medium hover:bg-slate-800">
+                  Sign in
+                </Link>
+              )}
+            </div>
           </div>
         </div>
-      </nav>
+      </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 pt-24 pb-12">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">题库</h1>
-          <p className="text-dark-400">精选算法题，AI 个性化推荐，助你高效刷题</p>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
-          <div className="bg-dark-800 rounded-xl p-4 border border-dark-700">
-            <div className="text-2xl font-bold">{stats.total}</div>
-            <div className="text-dark-400 text-sm">总题目</div>
-          </div>
-          <div className="bg-dark-800 rounded-xl p-4 border border-dark-700">
-            <div className="text-2xl font-bold text-green-400">{stats.easy}</div>
-            <div className="text-dark-400 text-sm">简单</div>
-          </div>
-          <div className="bg-dark-800 rounded-xl p-4 border border-dark-700">
-            <div className="text-2xl font-bold text-yellow-400">{stats.medium}</div>
-            <div className="text-dark-400 text-sm">中等</div>
-          </div>
-          <div className="bg-dark-800 rounded-xl p-4 border border-dark-700">
-            <div className="text-2xl font-bold text-red-400">{stats.hard}</div>
-            <div className="text-dark-400 text-sm">困难</div>
-          </div>
+          <h1 className="text-2xl font-bold text-slate-900 mb-1">Problems</h1>
+          <p className="text-slate-500">Practice algorithm problems to improve your coding skills</p>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-4 mb-6">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-400" />
+        <div className="flex items-center gap-4 mb-6">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
-              placeholder="搜索题目..."
+              placeholder="Search problems..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-dark-800 border border-dark-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-
           <select
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
-            className="px-4 py-2.5 bg-dark-800 border border-dark-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="px-3 py-2 border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">所有难度</option>
-            <option value="easy">简单</option>
-            <option value="medium">中等</option>
-            <option value="hard">困难</option>
-          </select>
-
-          <select
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            className="px-4 py-2.5 bg-dark-800 border border-dark-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-          >
-            <option value="">所有主题</option>
-            <option value="array">数组</option>
-            <option value="string">字符串</option>
-            <option value="hash_table">哈希表</option>
-            <option value="linked_list">链表</option>
-            <option value="tree">树</option>
-            <option value="dp">动态规划</option>
-            <option value="graph">图</option>
-          </select>
-
-          <select
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="px-4 py-2.5 bg-dark-800 border border-dark-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-          >
-            <option value="">所有公司</option>
-            <option value="google">Google</option>
-            <option value="meta">Meta</option>
-            <option value="amazon">Amazon</option>
-            <option value="microsoft">Microsoft</option>
+            <option value="">All Difficulty</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
           </select>
         </div>
 
         {/* Problem List */}
-        <div className="bg-dark-800 rounded-xl border border-dark-700 overflow-hidden">
-          {/* Header */}
-          <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-dark-700/50 text-sm text-dark-400 font-medium">
-            <div className="col-span-1">状态</div>
-            <div className="col-span-5">题目</div>
-            <div className="col-span-2">难度</div>
-            <div className="col-span-2">通过率</div>
-            <div className="col-span-2">公司</div>
-          </div>
-
-          {/* Problems */}
-          <div className="divide-y divide-dark-700">
-            {loading ? (
-              <div className="px-6 py-12 text-center text-dark-400">
-                加载中...
-              </div>
-            ) : filteredProblems.length === 0 ? (
-              <div className="px-6 py-12 text-center text-dark-400">
-                没有找到匹配的题目
-              </div>
-            ) : (
-              filteredProblems.map((problem, i) => (
-                <motion.div
-                  key={problem.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <Link href={`/problems/${problem.slug}`}>
-                    <div className="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-dark-700/50 transition cursor-pointer group">
-                      <div className="col-span-1 flex items-center">
-                        <Circle className="w-5 h-5 text-dark-500" />
-                      </div>
-                      <div className="col-span-5 flex items-center gap-2">
-                        <span className="font-medium group-hover:text-purple-400 transition">
-                          {problem.id}. {problem.title}
-                        </span>
-                        <ChevronRight className="w-4 h-4 text-dark-500 group-hover:text-purple-400 transition opacity-0 group-hover:opacity-100" />
-                      </div>
-                      <div className="col-span-2 flex items-center">
-                        <span className={cn('px-2 py-0.5 rounded text-xs', getDifficultyBadgeClass(problem.difficulty))}>
-                          {problem.difficulty === 'easy' ? '简单' : problem.difficulty === 'medium' ? '中等' : '困难'}
-                        </span>
-                      </div>
-                      <div className="col-span-2 flex items-center text-dark-300">
-                        {problem.acceptance_rate.toFixed(1)}%
-                      </div>
-                      <div className="col-span-2 flex items-center gap-1">
-                        {problem.companies.slice(0, 2).map((c) => (
-                          <span key={c} className="px-1.5 py-0.5 bg-dark-700 rounded text-xs text-dark-400">
-                            {c}
-                          </span>
-                        ))}
-                        {problem.companies.length > 2 && (
-                          <span className="text-xs text-dark-500">+{problem.companies.length - 2}</span>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))
-            )}
-          </div>
+        <div className="border border-slate-200 rounded-md overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-slate-50 border-b border-slate-200">
+              <tr className="text-left text-sm text-slate-500">
+                <th className="px-4 py-3 w-12">Status</th>
+                <th className="px-4 py-3">Title</th>
+                <th className="px-4 py-3 w-24">Difficulty</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {loading ? (
+                <tr><td colSpan={3} className="px-4 py-8 text-center text-slate-400">Loading...</td></tr>
+              ) : filteredProblems.length === 0 ? (
+                <tr><td colSpan={3} className="px-4 py-8 text-center text-slate-400">No problems found</td></tr>
+              ) : (
+                filteredProblems.map((problem) => (
+                  <tr key={problem.id} className="hover:bg-slate-50">
+                    <td className="px-4 py-3">
+                      <Circle className="w-4 h-4 text-slate-300" />
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link href={`/problems/${problem.slug}`} className="text-slate-900 hover:text-blue-600 font-medium">
+                        {problem.id}. {problem.title}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={cn(
+                        'px-2 py-0.5 rounded text-xs font-medium',
+                        problem.difficulty === 'easy' ? 'bg-emerald-100 text-emerald-700' :
+                        problem.difficulty === 'medium' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+                      )}>
+                        {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

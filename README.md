@@ -1,198 +1,151 @@
-# AI Coding Teacher
+# Cok11 - AI Coding Teacher
 
-An AI-powered coding education platform featuring interview simulation, code battles, and personalized learning.
+A modern coding education platform with algorithm problem library, real-time code battles, and knowledge graph visualization. Clean GitHub-style UI with all AI features running locally.
 
-## Core Features
+## Features
 
-### AI Interview Simulator
-- Supports Google, Meta, Amazon interview styles
-- Algorithm, System Design, Behavioral, and Frontend interviews
-- Real-time conversation and code editing
-- Detailed scoring reports and improvement suggestions
-
-### Smart Problem Library
-- 500+ curated algorithm problems
-- AI-powered personalized recommendations
+### Problem Library
+- 500+ curated algorithm problems (Easy, Medium, Hard)
+- Topics: Arrays, Strings, Hash Tables, Trees, Graphs, Dynamic Programming
+- Multi-language support: Python, JavaScript, Java, C++, Go, Rust
 - Progressive hint system
-- Multi-language support (Python, JavaScript, Java, C++)
 
 ### Code Battle
-- Real-time 1v1 battles
-- ELO rating system
-- Global leaderboard
-- Friend challenges and tournaments
+- Real-time 1v1 competitive coding
+- ELO rating system for fair matchmaking
+- Same problem, race to finish first
+- Code similarity detection
 
-### Knowledge Graph
-- Visual learning paths
-- Mastery level tracking
-- Smart next-step recommendations
+### Dashboard
+- Knowledge graph visualization of learning progress
+- Topic mastery tracking
+- Personal statistics
+
+### Local AI
+- AST-based code analysis
+- Complexity estimation (time/space)
+- Algorithm pattern detection
+- Plagiarism detection via Winnowing fingerprint
 
 ## Quick Start
 
-### Prerequisites
+### Requirements
 
 - Node.js 18+
 - Python 3.10+
-- (Optional) OpenAI API Key or Anthropic API Key
 
-### Backend Setup
+### Backend
 
 ```bash
-# Enter backend directory
 cd backend
 
 # Create virtual environment
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+venv\Scripts\activate  # Linux/Mac: source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Create .env file
+# Copy environment config
 cp .env.example .env
-# Edit .env to add your API keys
 
-# Initialize database and seed sample data
+# Initialize database
 python seed_data.py
 
-# Start the server
+# Start server
 uvicorn app.main:app --reload --port 8000
 ```
 
-### Frontend Setup
+### Frontend
 
 ```bash
-# Enter frontend directory
 cd frontend
 
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
 ```
 
-Visit http://localhost:3000 to get started.
+Access the application at http://localhost:3000
 
 ## Tech Stack
 
 ### Frontend
-- **Framework**: Next.js 14 + TypeScript
-- **Styling**: Tailwind CSS
-- **State Management**: Zustand
-- **Code Editor**: Monaco Editor
-- **Visualization**: React Flow
-- **Animation**: Framer Motion
+- Next.js 14 with TypeScript
+- Tailwind CSS
+- Monaco Editor
+- React Flow
+- Zustand
+- Socket.IO Client
 
 ### Backend
-- **Framework**: FastAPI + Python
-- **Database**: SQLite (dev) / PostgreSQL (prod)
-- **Real-time**: Socket.IO
-- **AI**: OpenAI GPT-4 / Claude
+- FastAPI
+- SQLAlchemy with SQLite/PostgreSQL
+- Socket.IO
+- Piston API for code execution
 
-### Code Execution
-- Piston API (multi-language support)
-- Docker sandbox (production)
-
-## Project Structure
-
-```
-frontend/          Next.js 14 app
-backend/           FastAPI server
-```
 
 ## Configuration
 
-### Environment Variables
+### Backend Environment Variables
 
-Backend (`backend/.env`):
 ```env
-# AI Services
-OPENAI_API_KEY=sk-your-key
-ANTHROPIC_API_KEY=sk-ant-your-key
-
-# Database
 DATABASE_URL=sqlite:///./coding_teacher.db
-
-# JWT
-SECRET_KEY=your-secret-key
+SECRET_KEY=your-secret-key-change-in-production
+PISTON_API_URL=https://emkc.org/api/v2/piston
 ```
 
-### Running Without AI API
+### Frontend Environment Variables
 
-The system can run without AI API keys (demo mode):
-- Interview conversations return preset responses
-- Code analysis returns basic feedback
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
+NEXT_PUBLIC_SOCKET_URL=http://localhost:8000
+```
 
-## Screenshots
+## API Endpoints
 
-### Home Page
-Modern dark theme showcasing core features.
-
-### Problem Library
-Problem list with difficulty, topic, and company filters.
-
-### AI Interview
-Real-time conversation interface with code editor on the left and chat on the right.
-
-### Code Battle
-Split-screen showing both players' progress with real-time sync.
-
-### Knowledge Graph
-Interactive knowledge node graph showing mastery levels.
-
-## API Documentation
-
-Visit http://localhost:8000/docs after starting the backend for complete API documentation.
-
-### Main Endpoints
-
+### Users
 - `POST /api/users/register` - User registration
-- `POST /api/users/login` - User login
-- `GET /api/problems` - Get problem list
-- `GET /api/problems/{slug}` - Get problem details
-- `POST /api/problems/{slug}/submit` - Submit code
-- `POST /api/interviews/start` - Start interview
-- `POST /api/interviews/{id}/message` - Send message
-- `POST /api/battles/create` - Create battle
-- `POST /api/execute/run` - Run code
+- `POST /api/users/login` - Authentication
+- `GET /api/users/me` - Current user profile
+- `GET /api/users/leaderboard` - Global rankings
+
+### Problems
+- `GET /api/problems` - List problems with filters
+- `GET /api/problems/{slug}` - Problem details
+- `POST /api/problems/{slug}/submit` - Submit solution
+- `GET /api/problems/recommended` - Personalized recommendations
+
+### Battles
+- `POST /api/battles/create` - Create battle room
+- `POST /api/battles/{id}/join` - Join battle
+- `POST /api/battles/{id}/submit` - Submit battle solution
+- `GET /api/battles/{id}/compare` - Compare solutions
+
+### Code Execution
+- `POST /api/execute/run` - Execute code
+- `POST /api/execute/test` - Run test cases
+- `POST /api/execute/analyze` - Analyze code quality
+
+Full API documentation available at http://localhost:8000/docs
 
 ## Deployment
 
-### Vercel (Frontend)
+### Frontend (Vercel)
+
 ```bash
 cd frontend
 vercel
 ```
 
-### Railway/Fly.io (Backend)
-```bash
-cd backend
-# Follow platform documentation
-```
+### Backend (Railway/Fly.io)
+
+Configure environment variables and deploy following platform documentation.
 
 ### Database
-- Development: SQLite
-- Production: PostgreSQL (Neon or Supabase recommended)
 
-## Contributing
-
-Pull requests are welcome.
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- Development: SQLite (default)
+- Production: PostgreSQL recommended
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) file for details
-
-## Acknowledgments
-
-- [Monaco Editor](https://microsoft.github.io/monaco-editor/)
-- [React Flow](https://reactflow.dev/)
-- [Piston API](https://github.com/engineer-man/piston)
-- [OpenAI](https://openai.com/)
-- [Anthropic](https://anthropic.com/)
+MIT License - See LICENSE file for details

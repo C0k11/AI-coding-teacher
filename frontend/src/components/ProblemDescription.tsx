@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, Lightbulb, Building2, Tag, Clock, Database } from 'lucide-react'
-import { cn, getDifficultyBadgeClass } from '@/lib/utils'
+import { ChevronDown, ChevronUp, Lightbulb, Tag } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import type { Problem } from '@/lib/api'
 
 interface ProblemDescriptionProps {
@@ -41,54 +41,44 @@ export default function ProblemDescription({
   }
 
   return (
-    <div className="h-full overflow-y-auto p-6 space-y-6">
+    <div className="h-full overflow-y-auto p-6 space-y-6 bg-white">
       {/* Header */}
       <div>
         <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-2xl font-bold">{problem.title}</h1>
-          <span className={cn('px-2 py-0.5 rounded text-sm', getDifficultyBadgeClass(problem.difficulty))}>
-            {problem.difficulty === 'easy' ? 'Easy' : problem.difficulty === 'medium' ? 'Medium' : 'Hard'}
-          </span>
-        </div>
-        
-        {/* Stats */}
-        <div className="flex items-center gap-4 text-sm text-dark-400">
-          <span className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            {problem.acceptance_rate.toFixed(1)}% Acceptance Rate
-          </span>
-          <span className="flex items-center gap-1">
-            <Database className="w-4 h-4" />
-            {problem.submission_count} Submissions
+          <h1 className="text-xl font-bold text-slate-900">{problem.title}</h1>
+          <span className={cn(
+            'px-2 py-0.5 rounded text-xs font-medium',
+            problem.difficulty === 'easy' ? 'bg-emerald-100 text-emerald-700' :
+            problem.difficulty === 'medium' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+          )}>
+            {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
           </span>
         </div>
       </div>
 
       {/* Description */}
-      <div className="prose prose-invert prose-sm max-w-none">
-        <div className="whitespace-pre-wrap text-dark-200 leading-relaxed">
-          {problem.description}
-        </div>
+      <div className="whitespace-pre-wrap text-slate-700 leading-relaxed text-sm">
+        {problem.description}
       </div>
 
       {/* Examples */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Examples</h3>
+        <h3 className="text-base font-semibold text-slate-900">Examples</h3>
         {problem.examples.map((example, i) => (
-          <div key={i} className="bg-dark-800 rounded-lg p-4 border border-dark-700">
+          <div key={i} className="bg-slate-50 rounded-md p-4 border border-slate-200">
             <div className="space-y-2">
               <div>
-                <span className="text-dark-400 text-sm">Input:</span>
-                <code className="block mt-1 text-sm font-mono text-blue-400">{example.input}</code>
+                <span className="text-slate-500 text-sm">Input:</span>
+                <code className="block mt-1 text-sm font-mono text-blue-600">{example.input}</code>
               </div>
               <div>
-                <span className="text-dark-400 text-sm">Output:</span>
-                <code className="block mt-1 text-sm font-mono text-green-400">{example.output}</code>
+                <span className="text-slate-500 text-sm">Output:</span>
+                <code className="block mt-1 text-sm font-mono text-emerald-600">{example.output}</code>
               </div>
               {example.explanation && (
                 <div>
-                  <span className="text-dark-400 text-sm">Explanation:</span>
-                  <p className="mt-1 text-sm text-dark-300">{example.explanation}</p>
+                  <span className="text-slate-500 text-sm">Explanation:</span>
+                  <p className="mt-1 text-sm text-slate-600">{example.explanation}</p>
                 </div>
               )}
             </div>
@@ -98,8 +88,8 @@ export default function ProblemDescription({
 
       {/* Constraints */}
       <div>
-        <h3 className="text-lg font-semibold mb-3">Constraints</h3>
-        <ul className="list-disc list-inside space-y-1 text-sm text-dark-300">
+        <h3 className="text-base font-semibold text-slate-900 mb-3">Constraints</h3>
+        <ul className="list-disc list-inside space-y-1 text-sm text-slate-600">
           {problem.constraints.map((constraint, i) => (
             <li key={i}>{constraint}</li>
           ))}
@@ -107,52 +97,38 @@ export default function ProblemDescription({
       </div>
 
       {/* Tags */}
-      <div className="space-y-3">
+      {problem.topics.length > 0 && (
         <div className="flex items-center gap-2 flex-wrap">
-          <Tag className="w-4 h-4 text-dark-400" />
+          <Tag className="w-4 h-4 text-slate-400" />
           {problem.topics.map((topic) => (
             <span
               key={topic}
-              className="px-2 py-1 bg-dark-700 rounded text-xs text-dark-300"
+              className="px-2 py-1 bg-slate-100 rounded text-xs text-slate-600"
             >
               {topic}
             </span>
           ))}
         </div>
-        
-        {problem.companies.length > 0 && (
-          <div className="flex items-center gap-2 flex-wrap">
-            <Building2 className="w-4 h-4 text-dark-400" />
-            {problem.companies.map((company) => (
-              <span
-                key={company}
-                className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs"
-              >
-                {company}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+      )}
 
       {/* Hints */}
       {onGetHint && (
-        <div className="border-t border-dark-700 pt-4">
+        <div className="border-t border-slate-200 pt-4">
           <button
             onClick={() => setShowHints(!showHints)}
-            className="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition"
+            className="flex items-center gap-2 text-amber-600 hover:text-amber-700 transition"
           >
             <Lightbulb className="w-5 h-5" />
-            <span>Hints ({currentHintLevel}/3)</span>
+            <span className="font-medium">Hints ({currentHintLevel}/3)</span>
             {showHints ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
           {showHints && (
             <div className="mt-4 space-y-3">
               {hints.map((hint, i) => (
-                <div key={i} className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                  <span className="text-yellow-400 font-medium">Hint {i + 1}:</span>
-                  <p className="text-dark-200 mt-1">{hint}</p>
+                <div key={i} className="bg-amber-50 border border-amber-200 rounded-md p-3">
+                  <span className="text-amber-700 font-medium">Hint {i + 1}:</span>
+                  <p className="text-slate-700 mt-1 text-sm">{hint}</p>
                 </div>
               ))}
               
@@ -160,7 +136,7 @@ export default function ProblemDescription({
                 <button
                   onClick={handleGetHint}
                   disabled={loadingHint}
-                  className="text-sm text-yellow-400 hover:text-yellow-300 transition"
+                  className="text-sm text-amber-600 hover:text-amber-700 transition font-medium"
                 >
                   {loadingHint ? 'Loading...' : 'Get Next Hint'}
                 </button>

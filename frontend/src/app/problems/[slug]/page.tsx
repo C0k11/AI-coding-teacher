@@ -4,15 +4,13 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { 
-  Code2, 
   ChevronLeft, 
   Play, 
   Send, 
   CheckCircle, 
   XCircle,
   Terminal,
-  FileText,
-  MessageSquare
+  FileText
 } from 'lucide-react'
 import CodeEditor from '@/components/CodeEditor'
 import ProblemDescription from '@/components/ProblemDescription'
@@ -21,19 +19,18 @@ import { cn } from '@/lib/utils'
 import { problems as problemsApi, execution, type Problem } from '@/lib/api'
 import { useAuthStore } from '@/store/useStore'
 
-// Sample problem for demo
 const SAMPLE_PROBLEM: Problem = {
   id: 1,
   title: 'Two Sum',
   slug: 'two-sum',
-  description: `给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出和为目标值 target 的那两个整数，并返回它们的数组下标。
+  description: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 
-你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
 
-你可以按任意顺序返回答案。`,
+You can return the answer in any order.`,
   difficulty: 'easy',
   examples: [
-    { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]', explanation: '因为 nums[0] + nums[1] == 9，返回 [0, 1]。' },
+    { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]', explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].' },
     { input: 'nums = [3,2,4], target = 6', output: '[1,2]' },
     { input: 'nums = [3,3], target = 6', output: '[0,1]' },
   ],
@@ -41,38 +38,31 @@ const SAMPLE_PROBLEM: Problem = {
     '2 <= nums.length <= 10^4',
     '-10^9 <= nums[i] <= 10^9',
     '-10^9 <= target <= 10^9',
-    '只会存在一个有效答案',
+    'Only one valid answer exists.',
   ],
   starter_code: {
     python: `class Solution:
     def twoSum(self, nums: list[int], target: int) -> list[int]:
-        # 在这里写你的代码
         pass`,
-    javascript: `/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
-var twoSum = function(nums, target) {
-    // 在这里写你的代码
+    javascript: `var twoSum = function(nums, target) {
+    
 };`,
     java: `class Solution {
     public int[] twoSum(int[] nums, int target) {
-        // 在这里写你的代码
         return new int[]{};
     }
 }`,
   },
   topics: ['array', 'hash_table'],
-  companies: ['google', 'amazon', 'meta', 'microsoft'],
+  companies: [],
   patterns: ['two_pointers', 'hash_map'],
   hints: [
-    '可以使用暴力法，遍历每对数字检查它们的和',
-    '考虑使用哈希表来优化查找时间',
-    '遍历数组时，对于每个元素，检查 target - nums[i] 是否在哈希表中',
+    'A brute force approach would be to iterate through each pair of numbers and check if they sum to target.',
+    'Can you use a hash table to optimize the lookup time?',
+    'For each element, check if target - nums[i] exists in the hash table.',
   ],
   acceptance_rate: 48.2,
-  submission_count: 15234,
+  submission_count: 0,
 }
 
 type TabType = 'description' | 'output' | 'submissions'
@@ -121,17 +111,17 @@ export default function ProblemPage() {
   const handleRun = async () => {
     setIsRunning(true)
     setActiveTab('output')
-    setConsoleOutput('运行中...')
+    setConsoleOutput('Running...')
 
     try {
       const result = await execution.run(code, language, '')
       if (result.success) {
-        setConsoleOutput(result.output || '(无输出)')
+        setConsoleOutput(result.output || '(no output)')
       } else {
-        setConsoleOutput(`错误:\n${result.error}`)
+        setConsoleOutput(`Error:\n${result.error}`)
       }
     } catch (error) {
-      setConsoleOutput('执行失败，请检查代码')
+      setConsoleOutput('Execution failed')
     } finally {
       setIsRunning(false)
     }
@@ -178,29 +168,34 @@ export default function ProblemPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-dark-900 flex items-center justify-center">
-        <div className="animate-pulse text-dark-400">加载题目中...</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-slate-400">Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-dark-900 flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-dark-700">
+      <nav className="sticky top-0 z-50 bg-white border-b border-slate-200">
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/problems" className="p-2 hover:bg-dark-700 rounded-lg transition">
+            <Link href="/problems" className="p-2 hover:bg-slate-100 rounded-md transition text-slate-600">
               <ChevronLeft className="w-5 h-5" />
             </Link>
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                <Code2 className="w-5 h-5 text-white" />
-              </div>
+            <Link href="/" className="text-lg font-bold">
+              <span className="text-slate-800">Cok</span>
+              <span className="text-blue-500">11</span>
             </Link>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">{problem.id}. {problem.title}</span>
-            </div>
+            <span className="text-slate-300">|</span>
+            <span className="font-medium text-slate-900">{problem.id}. {problem.title}</span>
+            <span className={cn(
+              'px-2 py-0.5 rounded text-xs font-medium',
+              problem.difficulty === 'easy' ? 'bg-emerald-100 text-emerald-700' :
+              problem.difficulty === 'medium' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+            )}>
+              {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+            </span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -208,27 +203,27 @@ export default function ProblemPage() {
               onClick={handleRun}
               disabled={isRunning}
               className={cn(
-                'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition',
+                'flex items-center gap-2 px-4 py-2 rounded-md font-medium transition text-sm',
                 isRunning
-                  ? 'bg-dark-600 text-dark-400 cursor-not-allowed'
-                  : 'bg-dark-700 text-white hover:bg-dark-600'
+                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               )}
             >
               <Play className="w-4 h-4" />
-              {isRunning ? '运行中...' : '运行'}
+              {isRunning ? 'Running...' : 'Run'}
             </button>
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
               className={cn(
-                'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition',
+                'flex items-center gap-2 px-4 py-2 rounded-md font-medium transition text-sm',
                 isSubmitting
-                  ? 'bg-green-900 text-green-400 cursor-not-allowed'
-                  : 'bg-green-600 text-white hover:bg-green-500'
+                  ? 'bg-emerald-200 text-emerald-600 cursor-not-allowed'
+                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
               )}
             >
               <Send className="w-4 h-4" />
-              {isSubmitting ? '提交中...' : '提交'}
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </button>
           </div>
         </div>
@@ -237,49 +232,37 @@ export default function ProblemPage() {
       {/* Main Content */}
       <div className="flex-1 flex">
         {/* Left Panel - Problem Description */}
-        <div className="w-1/2 border-r border-dark-700 overflow-hidden flex flex-col">
+        <div className="w-1/2 border-r border-slate-200 overflow-hidden flex flex-col">
           {/* Tabs */}
-          <div className="flex items-center border-b border-dark-700 bg-dark-800">
+          <div className="flex items-center border-b border-slate-200 bg-slate-50">
             <button
               onClick={() => setActiveTab('description')}
               className={cn(
-                'flex items-center gap-2 px-4 py-3 border-b-2 transition',
+                'flex items-center gap-2 px-4 py-3 border-b-2 transition text-sm',
                 activeTab === 'description'
-                  ? 'border-purple-500 text-white'
-                  : 'border-transparent text-dark-400 hover:text-white'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
               )}
             >
               <FileText className="w-4 h-4" />
-              题目描述
+              Description
             </button>
             <button
               onClick={() => setActiveTab('output')}
               className={cn(
-                'flex items-center gap-2 px-4 py-3 border-b-2 transition',
+                'flex items-center gap-2 px-4 py-3 border-b-2 transition text-sm',
                 activeTab === 'output'
-                  ? 'border-purple-500 text-white'
-                  : 'border-transparent text-dark-400 hover:text-white'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
               )}
             >
               <Terminal className="w-4 h-4" />
-              输出
+              Output
               {testResults && (
                 testResults.status === 'accepted' 
-                  ? <CheckCircle className="w-4 h-4 text-green-400" />
-                  : <XCircle className="w-4 h-4 text-red-400" />
+                  ? <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  : <XCircle className="w-4 h-4 text-red-500" />
               )}
-            </button>
-            <button
-              onClick={() => setActiveTab('submissions')}
-              className={cn(
-                'flex items-center gap-2 px-4 py-3 border-b-2 transition',
-                activeTab === 'submissions'
-                  ? 'border-purple-500 text-white'
-                  : 'border-transparent text-dark-400 hover:text-white'
-              )}
-            >
-              <MessageSquare className="w-4 h-4" />
-              提交记录
             </button>
           </div>
 
@@ -292,7 +275,7 @@ export default function ProblemPage() {
               />
             )}
             {activeTab === 'output' && (
-              <div className="h-full">
+              <div className="h-full bg-white">
                 {testResults ? (
                   <TestResults
                     status={testResults.status}
@@ -302,30 +285,25 @@ export default function ProblemPage() {
                   />
                 ) : (
                   <div className="p-4">
-                    <div className="font-mono text-sm bg-dark-800 rounded-lg p-4 whitespace-pre-wrap">
-                      {consoleOutput || '点击"运行"执行代码'}
+                    <div className="font-mono text-sm bg-slate-50 border border-slate-200 rounded-md p-4 whitespace-pre-wrap text-slate-700">
+                      {consoleOutput || 'Click "Run" to execute your code'}
                     </div>
                   </div>
                 )}
-              </div>
-            )}
-            {activeTab === 'submissions' && (
-              <div className="p-6 text-center text-dark-400">
-                登录后查看提交记录
               </div>
             )}
           </div>
         </div>
 
         {/* Right Panel - Code Editor */}
-        <div className="w-1/2 flex flex-col">
+        <div className="w-1/2 flex flex-col bg-slate-900">
           <CodeEditor
             code={code}
             language={language}
             onChange={setCode}
             onReset={handleReset}
             onLanguageChange={setLanguage}
-            height="calc(100vh - 120px)"
+            height="calc(100vh - 60px)"
             showActions={false}
             languages={Object.keys(problem.starter_code)}
           />

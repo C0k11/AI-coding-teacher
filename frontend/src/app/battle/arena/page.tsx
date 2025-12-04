@@ -108,7 +108,7 @@ export default function BattleArenaPage() {
 
       // Check for win
       if (result.status === 'accepted') {
-        endBattle(user?.username || '你')
+        endBattle(user?.username || 'You')
         setShowResults(true)
       }
     } catch (error) {
@@ -139,12 +139,12 @@ export default function BattleArenaPage() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
-                  <span className="font-bold">你</span>
+                  <span className="font-bold">You</span>
                 </div>
                 <div>
                   <div className="font-semibold">{user?.username || 'Player'}</div>
                   <div className="text-sm text-green-400">
-                    {myProgress.tests_passed}/{totalTests} 测试通过
+                    {myProgress.tests_passed}/{totalTests} tests passed
                   </div>
                 </div>
               </div>
@@ -180,11 +180,11 @@ export default function BattleArenaPage() {
                 <div>
                   <div className="font-semibold text-right">{opponent || 'Waiting...'}</div>
                   <div className="text-sm text-yellow-400 text-right">
-                    {opponentProgress.tests_passed}/{totalTests} 测试通过
+                    {opponentProgress.tests_passed}/{totalTests} tests passed
                   </div>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center">
-                  <span className="font-bold">对</span>
+                  <span className="font-bold">Opp</span>
                 </div>
               </div>
             </div>
@@ -201,30 +201,30 @@ export default function BattleArenaPage() {
                 <div className="text-center mb-6">
                   <Trophy className={cn(
                     'w-16 h-16 mx-auto mb-4',
-                    winner === (user?.username || '你') ? 'text-yellow-400' : 'text-gray-400'
+                    winner === (user?.username || 'You') ? 'text-yellow-400' : 'text-gray-400'
                   )} />
                   <h2 className="text-3xl font-bold mb-2">
-                    {winner === (user?.username || '你') ? '🎉 胜利!' : '败北'}
+                    {winner === (user?.username || 'You') ? 'Victory!' : 'Defeat'}
                   </h2>
                   <p className="text-dark-400">
-                    {winner === (user?.username || '你') 
-                      ? '恭喜你赢得了这场对战！' 
-                      : `${winner} 先完成了挑战`}
+                    {winner === (user?.username || 'You') 
+                      ? 'Congratulations on winning this battle!' 
+                      : `${winner} finished the challenge first`}
                   </p>
                 </div>
                 
-                {winner === (user?.username || '你') && (
+                {winner === (user?.username || 'You') && (
                   <div className="bg-green-500/10 rounded-lg p-4 mb-6 text-center">
                     <div className="text-green-400 font-bold text-2xl">+25 ELO</div>
-                    <div className="text-dark-400 text-sm">积分增加</div>
+                    <div className="text-dark-400 text-sm">Points earned</div>
                   </div>
                 )}
               </>
             ) : (
               <div className="text-center mb-6">
                 <Clock className="w-16 h-16 mx-auto mb-4 text-dark-400" />
-                <h2 className="text-3xl font-bold mb-2">时间结束</h2>
-                <p className="text-dark-400">双方都没有在规定时间内完成</p>
+                <h2 className="text-3xl font-bold mb-2">Time's Up</h2>
+                <p className="text-dark-400">Neither player completed in time</p>
               </div>
             )}
 
@@ -233,7 +233,7 @@ export default function BattleArenaPage() {
                 onClick={handleExit}
                 className="flex-1 px-6 py-3 bg-dark-700 rounded-lg hover:bg-dark-600 transition"
               >
-                返回大厅
+                Exit
               </button>
               <button
                 onClick={() => {
@@ -242,7 +242,7 @@ export default function BattleArenaPage() {
                 }}
                 className="flex-1 px-6 py-3 bg-orange-500 rounded-lg hover:bg-orange-600 transition"
               >
-                再来一局
+                Play Again
               </button>
             </div>
           </div>
@@ -260,12 +260,12 @@ export default function BattleArenaPage() {
 
           {problem.examples && (
             <div className="mt-6 space-y-4">
-              <h3 className="font-semibold">示例</h3>
+              <h3 className="font-semibold">Examples</h3>
               {problem.examples.map((ex: any, i: number) => (
                 <div key={i} className="bg-dark-800 rounded-lg p-3 text-sm">
-                  <div className="text-dark-400">输入：</div>
+                  <div className="text-dark-400">Input:</div>
                   <code className="text-blue-400">{ex.input}</code>
-                  <div className="text-dark-400 mt-2">输出：</div>
+                  <div className="text-dark-400 mt-2">Output:</div>
                   <code className="text-green-400">{ex.output}</code>
                 </div>
               ))}
@@ -275,7 +275,7 @@ export default function BattleArenaPage() {
           {/* Test Results */}
           {testResults && (
             <div className="mt-6">
-              <h3 className="font-semibold mb-3">提交结果</h3>
+              <h3 className="font-semibold mb-3">Result</h3>
               <div className={cn(
                 'rounded-lg p-4',
                 testResults.status === 'accepted' ? 'bg-green-500/10' : 'bg-red-500/10'
@@ -284,10 +284,10 @@ export default function BattleArenaPage() {
                   'font-bold mb-2',
                   testResults.status === 'accepted' ? 'text-green-400' : 'text-red-400'
                 )}>
-                  {testResults.status === 'accepted' ? '✓ 通过' : '✗ 未通过'}
+                  {testResults.status === 'accepted' ? 'Accepted' : 'Wrong Answer'}
                 </div>
                 <div className="text-sm text-dark-400">
-                  通过 {testResults.passed_count}/{testResults.total_count} 个测试
+                  Passed {testResults.passed_count}/{testResults.total_count} tests
                 </div>
               </div>
             </div>
@@ -309,7 +309,7 @@ export default function BattleArenaPage() {
           {/* Submit Bar */}
           <div className="p-4 border-t border-dark-700 flex items-center justify-between bg-dark-800">
             <div className="text-sm text-dark-400">
-              {myProgress.attempts} 次提交 · {code.split('\n').length} 行代码
+              {myProgress.attempts} submissions · {code.split('\n').length} lines
             </div>
             <button
               onClick={handleSubmit}
@@ -322,7 +322,7 @@ export default function BattleArenaPage() {
               )}
             >
               <Send className="w-5 h-5" />
-              {isSubmitting ? '提交中...' : '提交'}
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </button>
           </div>
         </div>

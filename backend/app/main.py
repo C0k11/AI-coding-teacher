@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import socketio
 
-from app.routers import problems, interviews, battles, users, execution
+from app.routers import problems, battles, users, execution
 from app.services.websocket_manager import sio
 
 
@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
 # Create FastAPI app
 app = FastAPI(
     title="AI Coding Teacher API",
-    description="AI-powered coding education platform with interview simulation, code battles, and personalized learning",
+    description="AI-powered coding education platform with code battles and personalized learning",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -40,7 +40,6 @@ app.add_middleware(
 # Include routers
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
 app.include_router(problems.router, prefix="/api/problems", tags=["Problems"])
-app.include_router(interviews.router, prefix="/api/interviews", tags=["Interviews"])
 app.include_router(battles.router, prefix="/api/battles", tags=["Battles"])
 app.include_router(execution.router, prefix="/api/execute", tags=["Code Execution"])
 

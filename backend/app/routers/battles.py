@@ -11,6 +11,7 @@ import uuid
 from app.models.database import get_db, Battle, Problem, User
 from app.schemas.schemas import BattleCreate, BattleStatus
 from app.routers.users import get_current_user
+from app.services.ai_service import ai_service
 
 router = APIRouter()
 
@@ -289,5 +290,47 @@ async def get_queue_status(current_user: User = Depends(get_current_user)):
     return {
         "queue_length": queue_length,
         "estimated_wait_seconds": queue_length * 30  # Rough estimate
+    }
+
+
+@router.get("/{battle_id}/compare")
+async def compare_battle_solutions(
+    battle_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Compare solutions from both players in a completed battle"""
+    
+    battle = db.query(Battle).filter(Battle.id == battle_id).first()
+    if not battle:
+        raise HTTPException(status_code=404, detail="Battle not found")
+    
+    if battle.status != "completed":
+        raise HTTPException(status_code=400, detail="Battle not completed yet")
+    
+    # Check if user is participant
+    if battle.player1_id != current_user.id and battle.player2_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not a participant")
+    
+    # Compare solutions using local AI
+    if battle.player1_submission and battle.player2_submission:
+        comparison = ai_service.compare_solutions(
+            battle.player1_submission,
+            battle.player2_submission,
+            "python"
+        )
+        
+        return {
+            "battle_id": battle_id,
+            "similarity": comparison,
+            "player1_score": battle.player1_score,
+            "player2_score": battle.player2_score,
+            "is_suspicious": comparison.get("is_suspicious", False)
+        }
+    
+    return {
+        "battle_id": battle_id,
+        "similarity": None,
+        "message": "One or both players did not submit"
     }
 

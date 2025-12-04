@@ -1,5 +1,5 @@
 """
-Code Execution Routes - Run and test code
+Code Execution Routes - Run, test, and analyze code
 """
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from app.schemas.schemas import CodeExecutionRequest, CodeExecutionResponse
 from app.services.code_executor import code_executor, local_executor
+from app.services.code_analyzer import analyze_code
 
 router = APIRouter()
 
@@ -93,5 +94,37 @@ async def get_supported_languages():
             {"id": "go", "name": "Go", "version": "1.16"},
             {"id": "rust", "name": "Rust", "version": "1.68"},
         ]
+    }
+
+
+class AnalyzeCodeRequest(BaseModel):
+    code: str
+    language: str = "python"
+
+
+@router.post("/analyze")
+async def analyze_code_endpoint(request: AnalyzeCodeRequest):
+    """
+    Analyze code quality, complexity, and patterns.
+    Uses local AI algorithms - no external API required.
+    
+    Returns:
+    - quality_score: Overall code quality (1-10)
+    - time_complexity: Estimated time complexity (e.g., O(n))
+    - space_complexity: Estimated space complexity
+    - detected_patterns: Algorithm patterns found in code
+    - strengths: Things done well
+    - improvements: Suggested improvements
+    - potential_bugs: Potential issues to fix
+    """
+    
+    if not request.code.strip():
+        raise HTTPException(status_code=400, detail="Code cannot be empty")
+    
+    analysis = analyze_code(request.code, request.language)
+    
+    return {
+        "success": True,
+        "analysis": analysis
     }
 
