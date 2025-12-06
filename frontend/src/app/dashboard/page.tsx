@@ -25,13 +25,9 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/useStore'
+import { useTranslations } from '@/lib/i18n'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/problems', label: 'Problems' },
-  { href: '/battle', label: 'Battle' },
-  { href: '/dashboard', label: 'Dashboard' },
-]
 
 // Knowledge Graph Data
 const initialNodes: Node[] = [
@@ -109,11 +105,19 @@ const DEFAULT_STATS = {
 
 export default function DashboardPage() {
   const router = useRouter()
+  const t = useTranslations()
   const { user: authUser } = useAuthStore()
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
   const [user, setUser] = useState<{ name: string } | null>(null)
+
+  const navItems = [
+    { href: '/', label: t.nav.home },
+    { href: '/problems', label: t.nav.problems },
+    { href: '/battle', label: t.nav.battle },
+    { href: '/dashboard', label: t.nav.dashboard },
+  ]
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user')
@@ -171,6 +175,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="hidden md:flex items-center gap-4">
+              <LanguageSwitcher />
               {user ? (
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2 text-slate-700">
@@ -183,7 +188,7 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <Link href="/login" className="px-4 py-2 text-white bg-slate-900 hover:bg-slate-800 rounded-md font-medium">
-                  Sign in
+                  {t.nav.signIn}
                 </Link>
               )}
             </div>
@@ -195,9 +200,9 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 mb-2">
-            Welcome back, {user?.name || 'Developer'}
+            {t.dashboard.welcome}, {user?.name || t.common.developer}
           </h1>
-          <p className="text-slate-500">Here is your learning progress</p>
+          <p className="text-slate-500">{t.dashboard.subtitle}</p>
         </div>
 
         {/* Stats Grid */}
@@ -209,7 +214,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-900">{stats.problems_solved}</div>
-                <div className="text-xs text-slate-500">Problems Solved</div>
+                <div className="text-xs text-slate-500">{t.dashboard.problemsSolved}</div>
               </div>
             </div>
           </div>
@@ -221,7 +226,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-900">{stats.battles_won}</div>
-                <div className="text-xs text-slate-500">Battles Won</div>
+                <div className="text-xs text-slate-500">{t.dashboard.battlesWon}</div>
               </div>
             </div>
           </div>
@@ -233,7 +238,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-900">{stats.current_streak}</div>
-                <div className="text-xs text-slate-500">Day Streak</div>
+                <div className="text-xs text-slate-500">{t.dashboard.dayStreak}</div>
               </div>
             </div>
           </div>
@@ -245,7 +250,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-900">{stats.elo_rating}</div>
-                <div className="text-xs text-slate-500">ELO Rating</div>
+                <div className="text-xs text-slate-500">{t.dashboard.eloRating}</div>
               </div>
             </div>
           </div>
@@ -258,9 +263,9 @@ export default function DashboardPage() {
               <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-blue-600" />
-                  Knowledge Graph
+                  {t.dashboard.knowledgeGraph}
                 </h2>
-                <span className="text-sm text-slate-500">Click node for details</span>
+                <span className="text-sm text-slate-500">{t.dashboard.clickForDetails}</span>
               </div>
               <div style={{ height: 500 }}>
                 <ReactFlow
@@ -292,21 +297,21 @@ export default function DashboardPage() {
           <div className="space-y-6">
             {/* Quick Actions */}
             <div className="bg-white rounded-md border border-slate-200 p-4">
-              <h3 className="font-semibold text-slate-900 mb-4">Quick Actions</h3>
+              <h3 className="font-semibold text-slate-900 mb-4">{t.dashboard.quickActions}</h3>
               <div className="space-y-3">
                 <Link
                   href="/problems"
                   className="flex items-center gap-3 p-3 bg-slate-50 rounded-md hover:bg-slate-100 transition"
                 >
                   <BookOpen className="w-5 h-5 text-blue-600" />
-                  <span className="font-medium text-slate-900">Practice Problems</span>
+                  <span className="font-medium text-slate-900">{t.dashboard.practiceProblems}</span>
                 </Link>
                 <Link
                   href="/battle"
                   className="flex items-center gap-3 p-3 bg-slate-50 rounded-md hover:bg-slate-100 transition"
                 >
                   <Swords className="w-5 h-5 text-blue-600" />
-                  <span className="font-medium text-slate-900">Code Battle</span>
+                  <span className="font-medium text-slate-900">{t.dashboard.codeBattle}</span>
                 </Link>
               </div>
             </div>

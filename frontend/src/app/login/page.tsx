@@ -17,9 +17,12 @@ import {
   Trophy,
   GitBranch
 } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 export default function LoginPage() {
   const router = useRouter()
+  const t = useTranslations()
   const [isLogin, setIsLogin] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -39,13 +42,13 @@ export default function LoginPage() {
 
     try {
       if (!isLogin && formData.password !== formData.confirmPassword) {
-        setError('Passwords do not match')
+        setError(t.login.passwordsNoMatch)
         setLoading(false)
         return
       }
 
       if (!isLogin && formData.password.length < 6) {
-        setError('Password must be at least 6 characters')
+        setError(t.login.passwordTooShort)
         setLoading(false)
         return
       }
@@ -81,10 +84,10 @@ export default function LoginPage() {
   }
 
   const features = [
-    { icon: BookOpen, text: '500+ Algorithm Problems' },
-    { icon: Swords, text: 'Real-time Code Battles' },
-    { icon: Trophy, text: 'ELO Ranking System' },
-    { icon: GitBranch, text: 'Learning Path Tracking' },
+    { icon: BookOpen, text: t.login.features.problems },
+    { icon: Swords, text: t.login.features.battles },
+    { icon: Trophy, text: t.login.features.ranking },
+    { icon: GitBranch, text: t.login.features.learning },
   ]
 
   return (
@@ -97,19 +100,22 @@ export default function LoginPage() {
           className="w-full max-w-md"
         >
           {/* Logo - Cok11 Brand */}
-          <Link href="/" className="flex items-center mb-8">
-            <span className="text-2xl font-bold tracking-tight">
-              <span className="text-slate-800">Cok</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-500">11</span>
-            </span>
-          </Link>
+          <div className="flex items-center justify-between mb-8">
+            <Link href="/" className="flex items-center">
+              <span className="text-2xl font-bold tracking-tight">
+                <span className="text-slate-800">Cok</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-500">11</span>
+              </span>
+            </Link>
+            <LanguageSwitcher />
+          </div>
 
           {/* Title */}
           <h1 className="text-3xl font-bold mb-2 text-slate-800">
-            {isLogin ? 'Welcome back' : 'Create account'}
+            {isLogin ? t.login.welcomeBack : t.login.createAccount}
           </h1>
           <p className="text-slate-500 mb-8">
-            {isLogin ? 'Sign in to continue your learning journey' : 'Register to start your coding journey'}
+            {isLogin ? t.login.signInSubtitle : t.login.signUpSubtitle}
           </p>
 
           {error && (
@@ -125,7 +131,7 @@ export default function LoginPage() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
               >
-                <label className="block text-sm font-medium text-slate-700 mb-2">Username</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">{t.login.username}</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input
@@ -133,7 +139,7 @@ export default function LoginPage() {
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                     className="input-primary pl-12"
-                    placeholder="Enter username"
+                    placeholder={t.login.enterUsername}
                     required={!isLogin}
                   />
                 </div>
@@ -141,7 +147,7 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">{t.login.email}</label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
@@ -156,7 +162,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Password</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">{t.login.password}</label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
@@ -164,7 +170,7 @@ export default function LoginPage() {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   className="input-primary pl-12 pr-12"
-                  placeholder="Enter password"
+                  placeholder={t.login.enterPassword}
                   required
                 />
                 <button
@@ -182,7 +188,7 @@ export default function LoginPage() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
               >
-                <label className="block text-sm font-medium text-slate-700 mb-2">Confirm Password</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">{t.login.confirmPassword}</label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input
@@ -190,7 +196,7 @@ export default function LoginPage() {
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                     className="input-primary pl-12"
-                    placeholder="Re-enter password"
+                    placeholder={t.login.reEnterPassword}
                     required={!isLogin}
                   />
                 </div>
@@ -206,7 +212,7 @@ export default function LoginPage() {
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  {isLogin ? 'Sign In' : 'Sign Up'}
+                  {isLogin ? t.login.signInBtn : t.login.signUpBtn}
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
@@ -215,7 +221,7 @@ export default function LoginPage() {
 
           {/* Toggle */}
           <p className="mt-8 text-center text-slate-600">
-            {isLogin ? "Don't have an account?" : 'Already have an account?'}
+            {isLogin ? t.login.noAccount : t.login.hasAccount}
             <button
               onClick={() => {
                 setIsLogin(!isLogin)
@@ -224,7 +230,7 @@ export default function LoginPage() {
               }}
               className="ml-2 text-blue-600 hover:text-blue-700 font-semibold"
             >
-              {isLogin ? 'Sign Up' : 'Sign In'}
+              {isLogin ? t.login.signUpBtn : t.login.signInBtn}
             </button>
           </p>
         </motion.div>
@@ -245,12 +251,10 @@ export default function LoginPage() {
             transition={{ delay: 0.2 }}
           >
             <h2 className="text-4xl font-bold mb-6 leading-tight">
-              Level up your
-              <br />
-              coding skills with AI
+              {t.login.sidebar.title}
             </h2>
             <p className="text-xl text-white/80 mb-12">
-              Algorithm problems, code battles, learning path tracking - all running locally
+              {t.login.sidebar.subtitle}
             </p>
           </motion.div>
 

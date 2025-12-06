@@ -16,50 +16,53 @@ import {
   User,
   LogOut
 } from 'lucide-react'
-
-const features = [
-  {
-    icon: BookOpen,
-    title: 'Problem Library',
-    description: '500+ curated algorithm problems covering arrays, linked lists, trees, graphs, and dynamic programming',
-    color: 'primary',
-  },
-  {
-    icon: Code2,
-    title: 'AI Code Analysis',
-    description: 'Local AI engine analyzes code quality, complexity, and algorithm patterns',
-    color: 'accent',
-  },
-  {
-    icon: Swords,
-    title: 'Real-time Battle',
-    description: '1v1 code battles with ELO rating system and global leaderboard',
-    color: 'success',
-  },
-  {
-    icon: GitBranch,
-    title: 'Learning Path',
-    description: 'Knowledge graph visualization, progress tracking, and smart recommendations',
-    color: 'primary',
-  }
-]
-
-const stats = [
-  { label: 'Problems', value: '500+' },
-  { label: 'Languages', value: '7+' },
-  { label: 'Battles', value: '50K+' },
-]
-
-const navItems = [
-  { href: '/', label: 'Home', icon: HomeIcon },
-  { href: '/problems', label: 'Problems', icon: BookOpen },
-  { href: '/battle', label: 'Battle', icon: Swords },
-  { href: '/dashboard', label: 'Dashboard', icon: BarChart3 },
-]
+import { useTranslations } from '@/lib/i18n'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 export default function Home() {
   const router = useRouter()
   const [user, setUser] = useState<{ name: string } | null>(null)
+  const t = useTranslations()
+
+  const features = [
+    {
+      icon: BookOpen,
+      title: t.home.features.problemLibrary.title,
+      description: t.home.features.problemLibrary.description,
+      color: 'primary',
+    },
+    {
+      icon: Code2,
+      title: t.home.features.aiAnalysis.title,
+      description: t.home.features.aiAnalysis.description,
+      color: 'accent',
+    },
+    {
+      icon: Swords,
+      title: t.home.features.realtimeBattle.title,
+      description: t.home.features.realtimeBattle.description,
+      color: 'success',
+    },
+    {
+      icon: GitBranch,
+      title: t.home.features.learningPath.title,
+      description: t.home.features.learningPath.description,
+      color: 'primary',
+    }
+  ]
+
+  const stats = [
+    { label: t.home.stats.problems, value: '500+' },
+    { label: t.home.stats.languages, value: '7+' },
+    { label: t.home.stats.battles, value: '50K+' },
+  ]
+
+  const navItems = [
+    { href: '/', label: t.nav.home, icon: HomeIcon },
+    { href: '/problems', label: t.nav.problems, icon: BookOpen },
+    { href: '/battle', label: t.nav.battle, icon: Swords },
+    { href: '/dashboard', label: t.nav.dashboard, icon: BarChart3 },
+  ]
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user')
@@ -106,6 +109,7 @@ export default function Home() {
 
             {/* Right side - User or Login */}
             <div className="hidden md:flex items-center gap-4">
+              <LanguageSwitcher />
               {user ? (
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2 text-slate-700">
@@ -124,7 +128,7 @@ export default function Home() {
                   href="/login"
                   className="px-4 py-2 text-white bg-slate-900 hover:bg-slate-800 rounded-md font-medium transition-colors"
                 >
-                  Sign in
+                  {t.nav.signIn}
                 </Link>
               )}
             </div>
@@ -142,14 +146,13 @@ export default function Home() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-4xl md:text-6xl font-bold mb-6 text-slate-900 leading-tight">
-                Build your coding skills
+                {t.home.heroTitle}
                 <br />
-                <span className="text-blue-600">with AI assistance</span>
+                <span className="text-blue-600">{t.home.heroTitleHighlight}</span>
               </h1>
             
               <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-10">
-                Algorithm practice, code analysis, real-time battles, and learning path tracking.
-                All running locally without external APIs.
+                {t.home.heroSubtitle}
               </p>
 
               <div className="flex items-center justify-center gap-4">
@@ -157,13 +160,13 @@ export default function Home() {
                   href="/problems"
                   className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
                 >
-                  Get started
+                  {t.home.getStarted}
                 </Link>
                 <Link 
                   href="/battle"
                   className="px-6 py-3 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-medium rounded-md transition-colors"
                 >
-                  Code Battle
+                  {t.home.codeBattle}
                 </Link>
               </div>
             </motion.div>
@@ -195,10 +198,10 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Core Features</span>
-            <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 text-slate-900">Everything you need to level up</h2>
+            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">{t.home.features.title}</span>
+            <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 text-slate-900">{t.home.features.subtitle}</h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              A complete learning system from basic practice to competitive battles
+              {t.home.features.description}
             </p>
           </motion.div>
 
@@ -240,20 +243,14 @@ export default function Home() {
             >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-orange-600 text-sm font-medium mb-4">
                 <Swords className="w-4 h-4" />
-                Real-time Competition
+                {t.home.battleSection.badge}
               </div>
-              <h2 className="text-4xl font-bold mb-4 text-slate-900">Code Battle</h2>
+              <h2 className="text-4xl font-bold mb-4 text-slate-900">{t.home.battleSection.title}</h2>
               <p className="text-slate-600 text-lg mb-6">
-                Real-time 1v1 battles against players worldwide. Same problem, race to finish first.
-                Quick match and friend challenge supported.
+                {t.home.battleSection.description}
               </p>
               <ul className="space-y-3 mb-8">
-                {[
-                  'Real-time sync with millisecond precision',
-                  'ELO rating for fair matchmaking',
-                  'Global leaderboard',
-                  'Code similarity detection'
-                ].map((item, i) => (
+                {t.home.battleSection.features.map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-slate-700">
                     <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
                       <Target className="w-3 h-3 text-green-600" />
@@ -266,7 +263,7 @@ export default function Home() {
                 href="/battle"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition font-medium"
               >
-                Start Battle
+                {t.home.battleSection.startBattle}
                 <Swords className="w-4 h-4" />
               </Link>
             </motion.div>
@@ -284,14 +281,14 @@ export default function Home() {
                       <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">P1</div>
                       <div>
                         <div className="font-semibold text-slate-800">Player1</div>
-                        <div className="text-sm text-green-600">85% progress</div>
+                        <div className="text-sm text-green-600">85% {t.home.battleSection.progress}</div>
                       </div>
                     </div>
                     <div className="text-2xl font-bold text-orange-500">VS</div>
                     <div className="flex items-center gap-3">
                       <div>
                         <div className="font-semibold text-slate-800 text-right">Player2</div>
-                        <div className="text-sm text-yellow-600 text-right">60% progress</div>
+                        <div className="text-sm text-yellow-600 text-right">60% {t.home.battleSection.progress}</div>
                       </div>
                       <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white font-bold">P2</div>
                     </div>
@@ -300,7 +297,7 @@ export default function Home() {
                 <div className="p-6">
                   <div className="text-center mb-4">
                     <div className="text-4xl font-mono font-bold text-slate-800">12:34</div>
-                    <div className="text-slate-500">Time Remaining</div>
+                    <div className="text-slate-500">{t.home.battleSection.timeRemaining}</div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
@@ -328,23 +325,23 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Ready to level up your coding skills?</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">{t.home.cta.title}</h2>
             <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              Start now and let AI power your programming journey
+              {t.home.cta.subtitle}
             </p>
             <div className="flex items-center justify-center gap-4">
               <Link 
                 href="/login"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
-                Get Started Free
+                {t.home.cta.getStartedFree}
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link 
                 href="/problems"
                 className="px-8 py-4 rounded-xl bg-white/10 hover:bg-white/20 transition font-semibold text-lg text-white border border-white/20"
               >
-                Browse Problems
+                {t.home.cta.browseProblems}
               </Link>
             </div>
           </motion.div>
@@ -362,9 +359,9 @@ export default function Home() {
               <span className="font-bold text-slate-800">AI Coding Teacher</span>
             </div>
             <div className="flex items-center gap-8 text-slate-500">
-              <Link href="/about" className="hover:text-slate-900 transition">About</Link>
-              <Link href="/docs" className="hover:text-slate-900 transition">Docs</Link>
-              <Link href="/privacy" className="hover:text-slate-900 transition">Privacy</Link>
+              <Link href="/about" className="hover:text-slate-900 transition">{t.home.footer.about}</Link>
+              <Link href="/docs" className="hover:text-slate-900 transition">{t.home.footer.docs}</Link>
+              <Link href="/privacy" className="hover:text-slate-900 transition">{t.home.footer.privacy}</Link>
             </div>
             <div className="text-slate-400 text-sm">
               2024 AI Coding Teacher

@@ -17,41 +17,13 @@ import {
 import { cn } from '@/lib/utils'
 import { battles } from '@/lib/api'
 import { useAuthStore, useBattleStore } from '@/store/useStore'
+import { useTranslations } from '@/lib/i18n'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
-const BATTLE_MODES = [
-  { 
-    id: 'quick_match', 
-    name: 'Quick Battle', 
-    description: 'Fill-in-the-blank & multiple choice code questions',
-    icon: '⚡',
-    time: '2:00',
-  },
-  { 
-    id: 'code_battle', 
-    name: 'Code Battle', 
-    description: 'Race to solve a coding problem 1v1',
-    icon: '⚔️',
-    time: '15:00',
-  },
-  { 
-    id: 'friend_challenge', 
-    name: 'Friend Challenge', 
-    description: 'Challenge a friend to a code battle',
-    icon: '👥',
-    time: '15:00',
-  },
-]
-
-
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/problems', label: 'Problems' },
-  { href: '/battle', label: 'Battle' },
-  { href: '/dashboard', label: 'Dashboard' },
-]
 
 export default function BattlePage() {
   const router = useRouter()
+  const t = useTranslations()
   const { token, user: authUser } = useAuthStore()
   const { startBattle } = useBattleStore()
   
@@ -59,6 +31,37 @@ export default function BattlePage() {
   const [friendUsername, setFriendUsername] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [user, setUser] = useState<{ name: string } | null>(null)
+
+  const BATTLE_MODES = [
+    { 
+      id: 'quick_match', 
+      name: t.battle.quickBattle.name, 
+      description: t.battle.quickBattle.description,
+      icon: '⚡',
+      time: '2:00',
+    },
+    { 
+      id: 'code_battle', 
+      name: t.battle.codeBattle.name, 
+      description: t.battle.codeBattle.description,
+      icon: '⚔️',
+      time: '15:00',
+    },
+    { 
+      id: 'friend_challenge', 
+      name: t.battle.friendChallenge.name, 
+      description: t.battle.friendChallenge.description,
+      icon: '👥',
+      time: '15:00',
+    },
+  ]
+
+  const navItems = [
+    { href: '/', label: t.nav.home },
+    { href: '/problems', label: t.nav.problems },
+    { href: '/battle', label: t.nav.battle },
+    { href: '/dashboard', label: t.nav.dashboard },
+  ]
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user')
@@ -157,6 +160,7 @@ export default function BattlePage() {
             </div>
 
             <div className="hidden md:flex items-center gap-4">
+              <LanguageSwitcher />
               {user ? (
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2 text-slate-700">
@@ -169,7 +173,7 @@ export default function BattlePage() {
                 </div>
               ) : (
                 <Link href="/login" className="px-4 py-2 text-white bg-slate-900 hover:bg-slate-800 rounded-md font-medium">
-                  Sign in
+                  {t.nav.signIn}
                 </Link>
               )}
             </div>
@@ -180,14 +184,14 @@ export default function BattlePage() {
       <div className="container mx-auto px-6 pt-28 pb-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Code Battle</h1>
-          <p className="text-slate-500">Compete with players worldwide on the same problem</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">{t.battle.title}</h1>
+          <p className="text-slate-500">{t.battle.subtitle}</p>
         </div>
 
         <div className="max-w-2xl">
           {/* Battle Modes */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-slate-900">Select Battle Mode</h2>
+            <h2 className="text-lg font-semibold text-slate-900">{t.battle.selectMode}</h2>
             
             <div className="space-y-3">
               {BATTLE_MODES.map((mode) => (
@@ -220,12 +224,12 @@ export default function BattlePage() {
             {/* Friend Challenge Input */}
             {selectedMode === 'friend_challenge' && (
               <div className="bg-slate-50 rounded-md p-4 border border-slate-200">
-                <label className="block text-sm text-slate-600 mb-2">Friend Username</label>
+                <label className="block text-sm text-slate-600 mb-2">{t.battle.friendUsername}</label>
                 <input
                   type="text"
                   value={friendUsername}
                   onChange={(e) => setFriendUsername(e.target.value)}
-                  placeholder="Enter friend's username"
+                  placeholder={t.battle.enterFriendUsername}
                   className="input-primary"
                 />
               </div>
@@ -243,7 +247,7 @@ export default function BattlePage() {
               )}
             >
               <Swords className="w-5 h-5" />
-              {isSearching ? 'Matching...' : 'Start Battle'}
+              {isSearching ? t.battle.matching : t.battle.startBattle}
             </button>
 
             {/* Battle Info */}
@@ -253,7 +257,7 @@ export default function BattlePage() {
                 <div className="text-lg font-bold text-slate-900">
                   {BATTLE_MODES.find(m => m.id === selectedMode)?.time}
                 </div>
-                <div className="text-xs text-slate-500">Time Limit</div>
+                <div className="text-xs text-slate-500">{t.battle.timeLimit}</div>
               </div>
               <div className="bg-white rounded-md p-4 border border-slate-200 text-center">
                 <Target className="w-5 h-5 mx-auto mb-2 text-slate-400" />
@@ -261,7 +265,7 @@ export default function BattlePage() {
                   {selectedMode === 'quick_match' ? '5 Qs' : '1v1'}
                 </div>
                 <div className="text-xs text-slate-500">
-                  {selectedMode === 'quick_match' ? 'Questions' : 'Battle Mode'}
+                  {selectedMode === 'quick_match' ? t.battle.questions : t.battle.battleMode}
                 </div>
               </div>
               <div className="bg-white rounded-md p-4 border border-slate-200 text-center">
@@ -269,7 +273,7 @@ export default function BattlePage() {
                 <div className="text-lg font-bold text-slate-900">
                   {selectedMode === 'quick_match' ? '+50' : '+25'}
                 </div>
-                <div className="text-xs text-slate-500">Max Points</div>
+                <div className="text-xs text-slate-500">{t.battle.maxPoints}</div>
               </div>
             </div>
           </div>

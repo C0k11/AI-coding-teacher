@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import { Search, Circle, User, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { problems as problemsApi, type ProblemListItem } from '@/lib/api'
+import { useTranslations } from '@/lib/i18n'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 const SAMPLE_PROBLEMS: ProblemListItem[] = [
   { id: 1, title: 'Two Sum', slug: 'two-sum', difficulty: 'easy', topics: ['array', 'hash_table'], companies: [], acceptance_rate: 48.2, submission_count: 0 },
@@ -15,19 +17,21 @@ const SAMPLE_PROBLEMS: ProblemListItem[] = [
   { id: 5, title: 'Binary Tree Level Order Traversal', slug: 'binary-tree-level-order-traversal', difficulty: 'medium', topics: ['tree', 'bfs'], companies: [], acceptance_rate: 58.3, submission_count: 0 },
 ]
 
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/problems', label: 'Problems' },
-  { href: '/battle', label: 'Battle' },
-]
 
 export default function ProblemsPage() {
   const router = useRouter()
+  const t = useTranslations()
   const [problems, setProblems] = useState<ProblemListItem[]>(SAMPLE_PROBLEMS)
   const [loading, setLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [difficulty, setDifficulty] = useState<string>('')
   const [user, setUser] = useState<{ name: string } | null>(null)
+
+  const navItems = [
+    { href: '/', label: t.nav.home },
+    { href: '/problems', label: t.nav.problems },
+    { href: '/battle', label: t.nav.battle },
+  ]
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user')
@@ -85,6 +89,7 @@ export default function ProblemsPage() {
               ))}
             </div>
             <div className="flex items-center gap-4">
+              <LanguageSwitcher />
               {user ? (
                 <div className="flex items-center gap-3">
                   <span className="text-slate-700 font-medium flex items-center gap-2">
@@ -96,7 +101,7 @@ export default function ProblemsPage() {
                 </div>
               ) : (
                 <Link href="/login" className="px-4 py-2 bg-slate-900 text-white rounded-md font-medium hover:bg-slate-800">
-                  Sign in
+                  {t.nav.signIn}
                 </Link>
               )}
             </div>
@@ -107,8 +112,8 @@ export default function ProblemsPage() {
       <div className="container mx-auto px-6 pt-24 pb-12">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-slate-900 mb-1">Problems</h1>
-          <p className="text-slate-500">Practice algorithm problems to improve your coding skills</p>
+          <h1 className="text-2xl font-bold text-slate-900 mb-1">{t.problems.title}</h1>
+          <p className="text-slate-500">{t.problems.subtitle}</p>
         </div>
 
         {/* Filters */}
@@ -117,7 +122,7 @@ export default function ProblemsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
-              placeholder="Search problems..."
+              placeholder={t.problems.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -128,10 +133,10 @@ export default function ProblemsPage() {
             onChange={(e) => setDifficulty(e.target.value)}
             className="px-3 py-2 border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">All Difficulty</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
+            <option value="">{t.problems.allDifficulty}</option>
+            <option value="easy">{t.problems.easy}</option>
+            <option value="medium">{t.problems.medium}</option>
+            <option value="hard">{t.problems.hard}</option>
           </select>
         </div>
 
@@ -140,16 +145,16 @@ export default function ProblemsPage() {
           <table className="w-full">
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr className="text-left text-sm text-slate-500">
-                <th className="px-4 py-3 w-12">Status</th>
-                <th className="px-4 py-3">Title</th>
-                <th className="px-4 py-3 w-24">Difficulty</th>
+                <th className="px-4 py-3 w-12">{t.problems.status}</th>
+                <th className="px-4 py-3">{t.problems.title}</th>
+                <th className="px-4 py-3 w-24">{t.problems.difficulty}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {loading ? (
-                <tr><td colSpan={3} className="px-4 py-8 text-center text-slate-400">Loading...</td></tr>
+                <tr><td colSpan={3} className="px-4 py-8 text-center text-slate-400">{t.problems.loading}</td></tr>
               ) : filteredProblems.length === 0 ? (
-                <tr><td colSpan={3} className="px-4 py-8 text-center text-slate-400">No problems found</td></tr>
+                <tr><td colSpan={3} className="px-4 py-8 text-center text-slate-400">{t.problems.noProblems}</td></tr>
               ) : (
                 filteredProblems.map((problem) => (
                   <tr key={problem.id} className="hover:bg-slate-50">
