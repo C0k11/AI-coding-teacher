@@ -4,32 +4,39 @@
   <img src="./AI%20Coding%20Teacher.gif" alt="Cok11 Demo" width="800">
 </p>
 
-A modern coding education platform with algorithm problem library, real-time code battles, and knowledge graph visualization. Clean GitHub-style UI with all AI features running locally.
+A modern coding education platform with algorithm problem library, real-time code battles, and knowledge graph visualization. Clean GitHub-style UI with bilingual support (English/Chinese) and all AI features running locally.
 
 ## Features
 
 ### Problem Library
-- 500+ curated algorithm problems (Easy, Medium, Hard)
-- Topics: Arrays, Strings, Hash Tables, Trees, Graphs, Dynamic Programming
+- 29 curated algorithm problems (Easy, Medium, Hard)
+- Topics: Arrays, Strings, Hash Tables, Trees, Graphs, Dynamic Programming, Linked Lists, Binary Search, Sliding Window, Two Pointers, Bit Manipulation, Trie, Heap
 - Multi-language support: Python, JavaScript, Java, C++, Go, Rust
-- Progressive hint system
+- Progressive hint system with detailed solutions
 
 ### Code Battle
-- Real-time 1v1 competitive coding
+- **Quick Battle**: Fill-in-the-blank and multiple choice code questions with timer
+- **Code Battle**: Real-time 1v1 competitive coding
 - ELO rating system for fair matchmaking
 - Same problem, race to finish first
 - Code similarity detection
 
 ### Dashboard
-- Knowledge graph visualization of learning progress
+- Knowledge graph visualization of learning progress (React Flow)
 - Topic mastery tracking
-- Personal statistics
+- Personal statistics and streaks
 
 ### Local AI
-- AST-based code analysis
-- Complexity estimation (time/space)
-- Algorithm pattern detection
-- Plagiarism detection via Winnowing fingerprint
+- AST-based code analysis (Python, JavaScript)
+- Cyclomatic and cognitive complexity metrics
+- Time/Space complexity estimation
+- Algorithm pattern detection (Two Pointers, Sliding Window, Binary Search, DFS, BFS, DP, etc.)
+- Code quality scoring with actionable suggestions
+- Plagiarism detection via Winnowing fingerprint algorithm
+
+### Internationalization
+- Bilingual UI: English and Chinese
+- Persistent language preference
 
 ## Quick Start
 
@@ -74,18 +81,22 @@ Access the application at http://localhost:3000
 ## Tech Stack
 
 ### Frontend
-- Next.js 14 with TypeScript
-- Tailwind CSS
-- Monaco Editor
-- React Flow
-- Zustand
-- Socket.IO Client
+- Next.js 14 with App Router and TypeScript
+- Tailwind CSS with custom GitHub-style design
+- Monaco Editor for code editing
+- React Flow for knowledge graph visualization
+- Framer Motion for animations
+- Zustand for state management
+- Socket.IO Client for real-time features
+- Lucide React for icons
 
 ### Backend
-- FastAPI
-- SQLAlchemy with SQLite/PostgreSQL
-- Socket.IO
-- Piston API for code execution
+- FastAPI with async support
+- SQLAlchemy 2.0 with SQLite (dev) / PostgreSQL (prod)
+- Python-SocketIO for real-time communication
+- Piston API for secure code execution
+- Custom AST-based code analyzer
+- JWT authentication with bcrypt
 
 
 ## Configuration
@@ -131,6 +142,41 @@ NEXT_PUBLIC_SOCKET_URL=http://localhost:8000
 - `POST /api/execute/analyze` - Analyze code quality
 
 Full API documentation available at http://localhost:8000/docs
+
+## Project Structure
+
+```
+AI-coding-teacher/
+├── backend/
+│   ├── app/
+│   │   ├── models/          # SQLAlchemy models
+│   │   ├── routers/         # API route handlers
+│   │   ├── schemas/         # Pydantic schemas
+│   │   ├── services/        # Business logic
+│   │   │   ├── ai_service.py
+│   │   │   ├── code_analyzer.py
+│   │   │   ├── code_executor.py
+│   │   │   ├── code_similarity.py
+│   │   │   ├── recommendation.py
+│   │   │   └── websocket_manager.py
+│   │   ├── config.py
+│   │   └── main.py
+│   ├── seed_data.py         # Problem database seeder
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── app/             # Next.js App Router pages
+│   │   │   ├── battle/      # Battle modes (quiz, arena)
+│   │   │   ├── dashboard/   # User dashboard
+│   │   │   ├── login/       # Authentication
+│   │   │   └── problems/    # Problem list and detail
+│   │   ├── components/      # Reusable UI components
+│   │   ├── lib/             # Utilities, API client, i18n
+│   │   └── store/           # Zustand state management
+│   ├── package.json
+│   └── tailwind.config.ts
+└── README.md
+```
 
 ## Deployment
 

@@ -492,6 +492,768 @@ A subarray is a contiguous non-empty sequence of elements within an array.""",
         ],
         "time_complexity": "O(n)",
         "space_complexity": "O(n)"
+    },
+    
+    # ============== Additional EASY Problems ==============
+    {
+        "title": "Palindrome Check",
+        "slug": "palindrome-check",
+        "description": """Given a string s, return true if it is a palindrome, false otherwise.
+
+A palindrome is a string that reads the same forward and backward. Ignore case and non-alphanumeric characters.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": 's = "A man, a plan, a canal: Panama"', "output": "true", "explanation": "After removing non-alphanumeric and ignoring case: 'amanaplanacanalpanama' is a palindrome."},
+            {"input": 's = "race a car"', "output": "false", "explanation": "'raceacar' is not a palindrome."}
+        ],
+        "constraints": ["1 <= s.length <= 2 * 10^5", "s consists only of printable ASCII characters."],
+        "starter_code": {
+            "python": "class Solution:\n    def isPalindrome(self, s: str) -> bool:\n        pass",
+            "javascript": "var isPalindrome = function(s) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "A man, a plan, a canal: Panama", "expected_output": "True"},
+            {"input": "race a car", "expected_output": "False"}
+        ],
+        "hidden_test_cases": [
+            {"input": " ", "expected_output": "True"}
+        ],
+        "topics": ["string", "two_pointers"],
+        "companies": ["meta", "microsoft"],
+        "patterns": ["two_pointers"],
+        "hints": [
+            "Filter out non-alphanumeric characters first.",
+            "Compare the string with its reverse.",
+            "Or use two pointers from both ends."
+        ],
+        "solutions": [
+            {
+                "approach": "Two Pointers",
+                "code": "class Solution:\n    def isPalindrome(self, s: str) -> bool:\n        cleaned = ''.join(c.lower() for c in s if c.isalnum())\n        return cleaned == cleaned[::-1]",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(n)",
+                "explanation": "Clean the string and compare with its reverse."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(n)"
+    },
+    {
+        "title": "Contains Duplicate",
+        "slug": "contains-duplicate",
+        "description": """Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "nums = [1,2,3,1]", "output": "true", "explanation": "1 appears twice."},
+            {"input": "nums = [1,2,3,4]", "output": "false", "explanation": "All elements are distinct."},
+            {"input": "nums = [1,1,1,3,3,4,3,2,4,2]", "output": "true", "explanation": ""}
+        ],
+        "constraints": ["1 <= nums.length <= 10^5", "-10^9 <= nums[i] <= 10^9"],
+        "starter_code": {
+            "python": "class Solution:\n    def containsDuplicate(self, nums: list[int]) -> bool:\n        pass",
+            "javascript": "var containsDuplicate = function(nums) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,2,3,1]", "expected_output": "True"},
+            {"input": "[1,2,3,4]", "expected_output": "False"}
+        ],
+        "hidden_test_cases": [
+            {"input": "[1]", "expected_output": "False"}
+        ],
+        "topics": ["array", "hash_table", "sorting"],
+        "companies": ["amazon", "google"],
+        "patterns": ["hash_set"],
+        "hints": [
+            "Use a hash set to track seen numbers.",
+            "Or sort the array and check adjacent elements."
+        ],
+        "solutions": [
+            {
+                "approach": "Hash Set",
+                "code": "class Solution:\n    def containsDuplicate(self, nums: list[int]) -> bool:\n        return len(nums) != len(set(nums))",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(n)",
+                "explanation": "Convert to set and compare lengths."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(n)"
+    },
+    {
+        "title": "Single Number",
+        "slug": "single-number",
+        "description": """Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
+
+You must implement a solution with O(n) runtime complexity and O(1) space complexity.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "nums = [2,2,1]", "output": "1", "explanation": ""},
+            {"input": "nums = [4,1,2,1,2]", "output": "4", "explanation": ""},
+            {"input": "nums = [1]", "output": "1", "explanation": ""}
+        ],
+        "constraints": ["1 <= nums.length <= 3 * 10^4", "-3 * 10^4 <= nums[i] <= 3 * 10^4", "Each element appears twice except for one."],
+        "starter_code": {
+            "python": "class Solution:\n    def singleNumber(self, nums: list[int]) -> int:\n        pass",
+            "javascript": "var singleNumber = function(nums) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[2,2,1]", "expected_output": "1"},
+            {"input": "[4,1,2,1,2]", "expected_output": "4"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "bit_manipulation"],
+        "companies": ["amazon", "google", "meta"],
+        "patterns": ["xor"],
+        "hints": [
+            "XOR of a number with itself is 0.",
+            "XOR of a number with 0 is the number itself.",
+            "XOR all numbers together."
+        ],
+        "solutions": [
+            {
+                "approach": "XOR",
+                "code": "class Solution:\n    def singleNumber(self, nums: list[int]) -> int:\n        result = 0\n        for num in nums:\n            result ^= num\n        return result",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "XOR all numbers. Pairs cancel out, leaving the single number."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Merge Two Sorted Lists",
+        "slug": "merge-two-sorted-lists",
+        "description": """You are given the heads of two sorted linked lists list1 and list2.
+
+Merge the two lists into one sorted list. The list should be made by splicing together the nodes of the first two lists.
+
+Return the head of the merged linked list.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "list1 = [1,2,4], list2 = [1,3,4]", "output": "[1,1,2,3,4,4]", "explanation": ""},
+            {"input": "list1 = [], list2 = []", "output": "[]", "explanation": ""},
+            {"input": "list1 = [], list2 = [0]", "output": "[0]", "explanation": ""}
+        ],
+        "constraints": ["The number of nodes in both lists is in the range [0, 50].", "-100 <= Node.val <= 100", "Both lists are sorted in non-decreasing order."],
+        "starter_code": {
+            "python": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\nclass Solution:\n    def mergeTwoLists(self, list1, list2):\n        pass",
+            "javascript": "/**\n * Definition for singly-linked list.\n * function ListNode(val, next) {\n *     this.val = (val===undefined ? 0 : val)\n *     this.next = (next===undefined ? null : next)\n * }\n */\nvar mergeTwoLists = function(list1, list2) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,2,4]\n[1,3,4]", "expected_output": "[1, 1, 2, 3, 4, 4]"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["linked_list", "recursion"],
+        "companies": ["amazon", "microsoft", "meta"],
+        "patterns": ["two_pointers", "recursion"],
+        "hints": [
+            "Use a dummy head node to simplify the code.",
+            "Compare the heads of both lists and add the smaller one.",
+            "Move the pointer forward in the list from which you took the node."
+        ],
+        "solutions": [
+            {
+                "approach": "Iterative",
+                "code": "class Solution:\n    def mergeTwoLists(self, list1, list2):\n        dummy = ListNode()\n        current = dummy\n        while list1 and list2:\n            if list1.val <= list2.val:\n                current.next = list1\n                list1 = list1.next\n            else:\n                current.next = list2\n                list2 = list2.next\n            current = current.next\n        current.next = list1 or list2\n        return dummy.next",
+                "time_complexity": "O(n + m)",
+                "space_complexity": "O(1)",
+                "explanation": "Use a dummy node and iterate through both lists."
+            }
+        ],
+        "time_complexity": "O(n + m)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Best Time to Buy and Sell Stock",
+        "slug": "best-time-to-buy-sell-stock",
+        "description": """You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+
+Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "prices = [7,1,5,3,6,4]", "output": "5", "explanation": "Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5."},
+            {"input": "prices = [7,6,4,3,1]", "output": "0", "explanation": "No profit possible, prices keep decreasing."}
+        ],
+        "constraints": ["1 <= prices.length <= 10^5", "0 <= prices[i] <= 10^4"],
+        "starter_code": {
+            "python": "class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        pass",
+            "javascript": "var maxProfit = function(prices) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[7,1,5,3,6,4]", "expected_output": "5"},
+            {"input": "[7,6,4,3,1]", "expected_output": "0"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "dp"],
+        "companies": ["amazon", "google", "meta", "microsoft"],
+        "patterns": ["kadane", "sliding_window"],
+        "hints": [
+            "Keep track of the minimum price seen so far.",
+            "At each day, calculate the profit if you sell today.",
+            "Update the maximum profit."
+        ],
+        "solutions": [
+            {
+                "approach": "One Pass",
+                "code": "class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        min_price = float('inf')\n        max_profit = 0\n        for price in prices:\n            min_price = min(min_price, price)\n            max_profit = max(max_profit, price - min_price)\n        return max_profit",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Track minimum price and maximum profit in one pass."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    
+    # ============== Additional MEDIUM Problems ==============
+    {
+        "title": "3Sum",
+        "slug": "3sum",
+        "description": """Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+Notice that the solution set must not contain duplicate triplets.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": "nums = [-1,0,1,2,-1,-4]", "output": "[[-1,-1,2],[-1,0,1]]", "explanation": "The distinct triplets are [-1,0,1] and [-1,-1,2]."},
+            {"input": "nums = [0,1,1]", "output": "[]", "explanation": "No triplet sums to 0."},
+            {"input": "nums = [0,0,0]", "output": "[[0,0,0]]", "explanation": ""}
+        ],
+        "constraints": ["3 <= nums.length <= 3000", "-10^5 <= nums[i] <= 10^5"],
+        "starter_code": {
+            "python": "class Solution:\n    def threeSum(self, nums: list[int]) -> list[list[int]]:\n        pass",
+            "javascript": "var threeSum = function(nums) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[-1,0,1,2,-1,-4]", "expected_output": "[[-1, -1, 2], [-1, 0, 1]]"},
+            {"input": "[0,0,0]", "expected_output": "[[0, 0, 0]]"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "two_pointers", "sorting"],
+        "companies": ["amazon", "google", "meta", "microsoft"],
+        "patterns": ["two_pointers"],
+        "hints": [
+            "Sort the array first.",
+            "Fix one element and use two pointers for the remaining two.",
+            "Skip duplicates to avoid duplicate triplets."
+        ],
+        "solutions": [
+            {
+                "approach": "Two Pointers",
+                "code": "class Solution:\n    def threeSum(self, nums: list[int]) -> list[list[int]]:\n        nums.sort()\n        result = []\n        for i in range(len(nums) - 2):\n            if i > 0 and nums[i] == nums[i-1]:\n                continue\n            left, right = i + 1, len(nums) - 1\n            while left < right:\n                total = nums[i] + nums[left] + nums[right]\n                if total < 0:\n                    left += 1\n                elif total > 0:\n                    right -= 1\n                else:\n                    result.append([nums[i], nums[left], nums[right]])\n                    while left < right and nums[left] == nums[left+1]:\n                        left += 1\n                    while left < right and nums[right] == nums[right-1]:\n                        right -= 1\n                    left += 1\n                    right -= 1\n        return result",
+                "time_complexity": "O(n^2)",
+                "space_complexity": "O(1)",
+                "explanation": "Sort and use two pointers for each fixed element."
+            }
+        ],
+        "time_complexity": "O(n^2)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Longest Substring Without Repeating Characters",
+        "slug": "longest-substring-without-repeating",
+        "description": """Given a string s, find the length of the longest substring without repeating characters.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": 's = "abcabcbb"', "output": "3", "explanation": "The answer is 'abc', with the length of 3."},
+            {"input": 's = "bbbbb"', "output": "1", "explanation": "The answer is 'b', with the length of 1."},
+            {"input": 's = "pwwkew"', "output": "3", "explanation": "The answer is 'wke', with the length of 3."}
+        ],
+        "constraints": ["0 <= s.length <= 5 * 10^4", "s consists of English letters, digits, symbols and spaces."],
+        "starter_code": {
+            "python": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        pass",
+            "javascript": "var lengthOfLongestSubstring = function(s) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "abcabcbb", "expected_output": "3"},
+            {"input": "bbbbb", "expected_output": "1"},
+            {"input": "pwwkew", "expected_output": "3"}
+        ],
+        "hidden_test_cases": [
+            {"input": "", "expected_output": "0"}
+        ],
+        "topics": ["string", "hash_table", "sliding_window"],
+        "companies": ["amazon", "google", "meta", "microsoft"],
+        "patterns": ["sliding_window"],
+        "hints": [
+            "Use a sliding window approach.",
+            "Use a hash map to store the last index of each character.",
+            "When you find a repeat, move the left pointer."
+        ],
+        "solutions": [
+            {
+                "approach": "Sliding Window",
+                "code": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        char_index = {}\n        left = max_len = 0\n        for right, char in enumerate(s):\n            if char in char_index and char_index[char] >= left:\n                left = char_index[char] + 1\n            char_index[char] = right\n            max_len = max(max_len, right - left + 1)\n        return max_len",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(min(m, n))",
+                "explanation": "Sliding window with hash map to track character positions."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(min(m, n))"
+    },
+    {
+        "title": "Product of Array Except Self",
+        "slug": "product-of-array-except-self",
+        "description": """Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+
+The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+
+You must write an algorithm that runs in O(n) time and without using the division operation.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": "nums = [1,2,3,4]", "output": "[24,12,8,6]", "explanation": ""},
+            {"input": "nums = [-1,1,0,-3,3]", "output": "[0,0,9,0,0]", "explanation": ""}
+        ],
+        "constraints": ["2 <= nums.length <= 10^5", "-30 <= nums[i] <= 30", "The product of any prefix or suffix fits in a 32-bit integer."],
+        "starter_code": {
+            "python": "class Solution:\n    def productExceptSelf(self, nums: list[int]) -> list[int]:\n        pass",
+            "javascript": "var productExceptSelf = function(nums) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,2,3,4]", "expected_output": "[24, 12, 8, 6]"},
+            {"input": "[-1,1,0,-3,3]", "expected_output": "[0, 0, 9, 0, 0]"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "prefix_sum"],
+        "companies": ["amazon", "google", "meta"],
+        "patterns": ["prefix_product"],
+        "hints": [
+            "Think about left and right products for each position.",
+            "First pass: calculate prefix products.",
+            "Second pass: multiply by suffix products."
+        ],
+        "solutions": [
+            {
+                "approach": "Prefix and Suffix",
+                "code": "class Solution:\n    def productExceptSelf(self, nums: list[int]) -> list[int]:\n        n = len(nums)\n        result = [1] * n\n        prefix = 1\n        for i in range(n):\n            result[i] = prefix\n            prefix *= nums[i]\n        suffix = 1\n        for i in range(n - 1, -1, -1):\n            result[i] *= suffix\n            suffix *= nums[i]\n        return result",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Calculate prefix products, then multiply by suffix products."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Container With Most Water",
+        "slug": "container-with-most-water",
+        "description": """You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+
+Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+Return the maximum amount of water a container can store.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": "height = [1,8,6,2,5,4,8,3,7]", "output": "49", "explanation": "The max area is between index 1 and 8."},
+            {"input": "height = [1,1]", "output": "1", "explanation": ""}
+        ],
+        "constraints": ["n == height.length", "2 <= n <= 10^5", "0 <= height[i] <= 10^4"],
+        "starter_code": {
+            "python": "class Solution:\n    def maxArea(self, height: list[int]) -> int:\n        pass",
+            "javascript": "var maxArea = function(height) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,8,6,2,5,4,8,3,7]", "expected_output": "49"},
+            {"input": "[1,1]", "expected_output": "1"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "two_pointers", "greedy"],
+        "companies": ["amazon", "google", "meta"],
+        "patterns": ["two_pointers"],
+        "hints": [
+            "Use two pointers starting from both ends.",
+            "Area = min(height[left], height[right]) * (right - left).",
+            "Move the pointer with smaller height inward."
+        ],
+        "solutions": [
+            {
+                "approach": "Two Pointers",
+                "code": "class Solution:\n    def maxArea(self, height: list[int]) -> int:\n        left, right = 0, len(height) - 1\n        max_area = 0\n        while left < right:\n            area = min(height[left], height[right]) * (right - left)\n            max_area = max(max_area, area)\n            if height[left] < height[right]:\n                left += 1\n            else:\n                right -= 1\n        return max_area",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Two pointers from both ends, move the shorter one."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Group Anagrams",
+        "slug": "group-anagrams",
+        "description": """Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": 'strs = ["eat","tea","tan","ate","nat","bat"]', "output": '[["bat"],["nat","tan"],["ate","eat","tea"]]', "explanation": ""},
+            {"input": 'strs = [""]', "output": '[[""]]', "explanation": ""},
+            {"input": 'strs = ["a"]', "output": '[["a"]]', "explanation": ""}
+        ],
+        "constraints": ["1 <= strs.length <= 10^4", "0 <= strs[i].length <= 100", "strs[i] consists of lowercase English letters."],
+        "starter_code": {
+            "python": "class Solution:\n    def groupAnagrams(self, strs: list[str]) -> list[list[str]]:\n        pass",
+            "javascript": "var groupAnagrams = function(strs) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": '["eat","tea","tan","ate","nat","bat"]', "expected_output": '[["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]'}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "hash_table", "string", "sorting"],
+        "companies": ["amazon", "google", "meta"],
+        "patterns": ["hash_map"],
+        "hints": [
+            "Anagrams have the same sorted characters.",
+            "Use sorted string as key in a hash map.",
+            "Or use character count tuple as key."
+        ],
+        "solutions": [
+            {
+                "approach": "Sorted Key",
+                "code": "from collections import defaultdict\n\nclass Solution:\n    def groupAnagrams(self, strs: list[str]) -> list[list[str]]:\n        groups = defaultdict(list)\n        for s in strs:\n            key = ''.join(sorted(s))\n            groups[key].append(s)\n        return list(groups.values())",
+                "time_complexity": "O(n * k log k)",
+                "space_complexity": "O(n * k)",
+                "explanation": "Use sorted string as key to group anagrams."
+            }
+        ],
+        "time_complexity": "O(n * k log k)",
+        "space_complexity": "O(n * k)"
+    },
+    {
+        "title": "Coin Change",
+        "slug": "coin-change",
+        "description": """You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+
+Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+
+You may assume that you have an infinite number of each kind of coin.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": "coins = [1,2,5], amount = 11", "output": "3", "explanation": "11 = 5 + 5 + 1"},
+            {"input": "coins = [2], amount = 3", "output": "-1", "explanation": "Cannot make 3 with only 2s."},
+            {"input": "coins = [1], amount = 0", "output": "0", "explanation": ""}
+        ],
+        "constraints": ["1 <= coins.length <= 12", "1 <= coins[i] <= 2^31 - 1", "0 <= amount <= 10^4"],
+        "starter_code": {
+            "python": "class Solution:\n    def coinChange(self, coins: list[int], amount: int) -> int:\n        pass",
+            "javascript": "var coinChange = function(coins, amount) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,2,5]\n11", "expected_output": "3"},
+            {"input": "[2]\n3", "expected_output": "-1"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "dp", "bfs"],
+        "companies": ["amazon", "google", "microsoft"],
+        "patterns": ["dp", "bfs"],
+        "hints": [
+            "Use dynamic programming.",
+            "dp[i] = minimum coins needed to make amount i.",
+            "For each coin, update dp[i] = min(dp[i], dp[i-coin] + 1)."
+        ],
+        "solutions": [
+            {
+                "approach": "Dynamic Programming",
+                "code": "class Solution:\n    def coinChange(self, coins: list[int], amount: int) -> int:\n        dp = [float('inf')] * (amount + 1)\n        dp[0] = 0\n        for i in range(1, amount + 1):\n            for coin in coins:\n                if coin <= i:\n                    dp[i] = min(dp[i], dp[i - coin] + 1)\n        return dp[amount] if dp[amount] != float('inf') else -1",
+                "time_complexity": "O(amount * n)",
+                "space_complexity": "O(amount)",
+                "explanation": "Bottom-up DP to find minimum coins for each amount."
+            }
+        ],
+        "time_complexity": "O(amount * n)",
+        "space_complexity": "O(amount)"
+    },
+    {
+        "title": "Number of Islands",
+        "slug": "number-of-islands",
+        "description": """Given an m x n 2D binary grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": 'grid = [\n  ["1","1","1","1","0"],\n  ["1","1","0","1","0"],\n  ["1","1","0","0","0"],\n  ["0","0","0","0","0"]\n]', "output": "1", "explanation": ""},
+            {"input": 'grid = [\n  ["1","1","0","0","0"],\n  ["1","1","0","0","0"],\n  ["0","0","1","0","0"],\n  ["0","0","0","1","1"]\n]', "output": "3", "explanation": ""}
+        ],
+        "constraints": ["m == grid.length", "n == grid[i].length", "1 <= m, n <= 300", "grid[i][j] is '0' or '1'."],
+        "starter_code": {
+            "python": "class Solution:\n    def numIslands(self, grid: list[list[str]]) -> int:\n        pass",
+            "javascript": "var numIslands = function(grid) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": '[["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]', "expected_output": "1"},
+            {"input": '[["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]', "expected_output": "3"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "dfs", "bfs", "union_find", "matrix"],
+        "companies": ["amazon", "google", "meta", "microsoft"],
+        "patterns": ["dfs", "bfs", "flood_fill"],
+        "hints": [
+            "Use DFS or BFS to explore each island.",
+            "Mark visited cells to avoid counting twice.",
+            "Count how many times you start a new DFS/BFS."
+        ],
+        "solutions": [
+            {
+                "approach": "DFS",
+                "code": "class Solution:\n    def numIslands(self, grid: list[list[str]]) -> int:\n        if not grid:\n            return 0\n        \n        rows, cols = len(grid), len(grid[0])\n        count = 0\n        \n        def dfs(r, c):\n            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == '0':\n                return\n            grid[r][c] = '0'\n            dfs(r+1, c)\n            dfs(r-1, c)\n            dfs(r, c+1)\n            dfs(r, c-1)\n        \n        for r in range(rows):\n            for c in range(cols):\n                if grid[r][c] == '1':\n                    count += 1\n                    dfs(r, c)\n        \n        return count",
+                "time_complexity": "O(m * n)",
+                "space_complexity": "O(m * n)",
+                "explanation": "DFS to flood fill each island and count."
+            }
+        ],
+        "time_complexity": "O(m * n)",
+        "space_complexity": "O(m * n)"
+    },
+    {
+        "title": "Validate Binary Search Tree",
+        "slug": "validate-binary-search-tree",
+        "description": """Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+
+A valid BST is defined as follows:
+- The left subtree of a node contains only nodes with keys less than the node's key.
+- The right subtree of a node contains only nodes with keys greater than the node's key.
+- Both the left and right subtrees must also be binary search trees.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": "root = [2,1,3]", "output": "true", "explanation": ""},
+            {"input": "root = [5,1,4,null,null,3,6]", "output": "false", "explanation": "The root's right child is 4, which is less than 5."}
+        ],
+        "constraints": ["The number of nodes is in the range [1, 10^4].", "-2^31 <= Node.val <= 2^31 - 1"],
+        "starter_code": {
+            "python": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\n\nclass Solution:\n    def isValidBST(self, root) -> bool:\n        pass",
+            "javascript": "/**\n * Definition for a binary tree node.\n * function TreeNode(val, left, right) {\n *     this.val = (val===undefined ? 0 : val)\n *     this.left = (left===undefined ? null : left)\n *     this.right = (right===undefined ? null : right)\n * }\n */\nvar isValidBST = function(root) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[2,1,3]", "expected_output": "True"},
+            {"input": "[5,1,4,null,null,3,6]", "expected_output": "False"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["tree", "dfs", "binary_search_tree", "binary_tree"],
+        "companies": ["amazon", "google", "meta"],
+        "patterns": ["dfs", "inorder"],
+        "hints": [
+            "Keep track of valid range for each node.",
+            "Left child must be in range (min, parent).",
+            "Right child must be in range (parent, max)."
+        ],
+        "solutions": [
+            {
+                "approach": "Recursive with Bounds",
+                "code": "class Solution:\n    def isValidBST(self, root) -> bool:\n        def validate(node, low, high):\n            if not node:\n                return True\n            if not (low < node.val < high):\n                return False\n            return validate(node.left, low, node.val) and validate(node.right, node.val, high)\n        \n        return validate(root, float('-inf'), float('inf'))",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(n)",
+                "explanation": "Recursively validate with updated bounds for each subtree."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(n)"
+    },
+    
+    # ============== Additional HARD Problems ==============
+    {
+        "title": "Merge K Sorted Lists",
+        "slug": "merge-k-sorted-lists",
+        "description": """You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+
+Merge all the linked-lists into one sorted linked-list and return it.""",
+        "difficulty": "hard",
+        "examples": [
+            {"input": "lists = [[1,4,5],[1,3,4],[2,6]]", "output": "[1,1,2,3,4,4,5,6]", "explanation": "Merge all lists into one sorted list."},
+            {"input": "lists = []", "output": "[]", "explanation": ""},
+            {"input": "lists = [[]]", "output": "[]", "explanation": ""}
+        ],
+        "constraints": ["k == lists.length", "0 <= k <= 10^4", "0 <= lists[i].length <= 500", "-10^4 <= lists[i][j] <= 10^4", "lists[i] is sorted in ascending order.", "The sum of lists[i].length will not exceed 10^4."],
+        "starter_code": {
+            "python": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\nclass Solution:\n    def mergeKLists(self, lists):\n        pass",
+            "javascript": "/**\n * Definition for singly-linked list.\n * function ListNode(val, next) {\n *     this.val = (val===undefined ? 0 : val)\n *     this.next = (next===undefined ? null : next)\n * }\n */\nvar mergeKLists = function(lists) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[[1,4,5],[1,3,4],[2,6]]", "expected_output": "[1, 1, 2, 3, 4, 4, 5, 6]"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["linked_list", "divide_conquer", "heap", "merge_sort"],
+        "companies": ["amazon", "google", "meta", "microsoft"],
+        "patterns": ["heap", "divide_conquer"],
+        "hints": [
+            "Use a min-heap to always get the smallest element.",
+            "Or use divide and conquer to merge pairs of lists.",
+            "Merge two lists at a time, reducing k lists to k/2."
+        ],
+        "solutions": [
+            {
+                "approach": "Min Heap",
+                "code": "import heapq\n\nclass Solution:\n    def mergeKLists(self, lists):\n        heap = []\n        for i, lst in enumerate(lists):\n            if lst:\n                heapq.heappush(heap, (lst.val, i, lst))\n        \n        dummy = ListNode()\n        current = dummy\n        \n        while heap:\n            val, i, node = heapq.heappop(heap)\n            current.next = node\n            current = current.next\n            if node.next:\n                heapq.heappush(heap, (node.next.val, i, node.next))\n        \n        return dummy.next",
+                "time_complexity": "O(n log k)",
+                "space_complexity": "O(k)",
+                "explanation": "Use min-heap to efficiently get the smallest element among k lists."
+            }
+        ],
+        "time_complexity": "O(n log k)",
+        "space_complexity": "O(k)"
+    },
+    {
+        "title": "Trapping Rain Water",
+        "slug": "trapping-rain-water",
+        "description": """Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.""",
+        "difficulty": "hard",
+        "examples": [
+            {"input": "height = [0,1,0,2,1,0,1,3,2,1,2,1]", "output": "6", "explanation": "The elevation map can trap 6 units of rain water."},
+            {"input": "height = [4,2,0,3,2,5]", "output": "9", "explanation": ""}
+        ],
+        "constraints": ["n == height.length", "1 <= n <= 2 * 10^4", "0 <= height[i] <= 10^5"],
+        "starter_code": {
+            "python": "class Solution:\n    def trap(self, height: list[int]) -> int:\n        pass",
+            "javascript": "var trap = function(height) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[0,1,0,2,1,0,1,3,2,1,2,1]", "expected_output": "6"},
+            {"input": "[4,2,0,3,2,5]", "expected_output": "9"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "two_pointers", "dp", "stack", "monotonic_stack"],
+        "companies": ["amazon", "google", "meta", "microsoft"],
+        "patterns": ["two_pointers", "monotonic_stack"],
+        "hints": [
+            "Water at position i = min(max_left, max_right) - height[i].",
+            "Use two pointers from both ends.",
+            "Track max height from left and right."
+        ],
+        "solutions": [
+            {
+                "approach": "Two Pointers",
+                "code": "class Solution:\n    def trap(self, height: list[int]) -> int:\n        if not height:\n            return 0\n        \n        left, right = 0, len(height) - 1\n        left_max, right_max = height[left], height[right]\n        water = 0\n        \n        while left < right:\n            if left_max < right_max:\n                left += 1\n                left_max = max(left_max, height[left])\n                water += left_max - height[left]\n            else:\n                right -= 1\n                right_max = max(right_max, height[right])\n                water += right_max - height[right]\n        \n        return water",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Two pointers track max heights from both sides."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Word Search II",
+        "slug": "word-search-ii",
+        "description": """Given an m x n board of characters and a list of strings words, return all words on the board.
+
+Each word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.""",
+        "difficulty": "hard",
+        "examples": [
+            {"input": 'board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]', "output": '["eat","oath"]', "explanation": ""},
+            {"input": 'board = [["a","b"],["c","d"]], words = ["abcb"]', "output": "[]", "explanation": ""}
+        ],
+        "constraints": ["m == board.length", "n == board[i].length", "1 <= m, n <= 12", "board[i][j] is a lowercase English letter.", "1 <= words.length <= 3 * 10^4", "1 <= words[i].length <= 10", "words[i] consists of lowercase English letters."],
+        "starter_code": {
+            "python": "class Solution:\n    def findWords(self, board: list[list[str]], words: list[str]) -> list[str]:\n        pass",
+            "javascript": "var findWords = function(board, words) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": '[["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]]\n["oath","pea","eat","rain"]', "expected_output": '["oath", "eat"]'}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "string", "backtracking", "trie", "matrix"],
+        "companies": ["amazon", "google", "meta", "microsoft"],
+        "patterns": ["trie", "backtracking", "dfs"],
+        "hints": [
+            "Build a Trie from the words list.",
+            "DFS from each cell, following the Trie.",
+            "Prune branches when no words can be formed."
+        ],
+        "solutions": [
+            {
+                "approach": "Trie + Backtracking",
+                "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.word = None\n\nclass Solution:\n    def findWords(self, board, words):\n        root = TrieNode()\n        for word in words:\n            node = root\n            for char in word:\n                if char not in node.children:\n                    node.children[char] = TrieNode()\n                node = node.children[char]\n            node.word = word\n        \n        rows, cols = len(board), len(board[0])\n        result = []\n        \n        def dfs(r, c, node):\n            char = board[r][c]\n            if char not in node.children:\n                return\n            \n            next_node = node.children[char]\n            if next_node.word:\n                result.append(next_node.word)\n                next_node.word = None\n            \n            board[r][c] = '#'\n            for dr, dc in [(0,1), (0,-1), (1,0), (-1,0)]:\n                nr, nc = r + dr, c + dc\n                if 0 <= nr < rows and 0 <= nc < cols and board[nr][nc] != '#':\n                    dfs(nr, nc, next_node)\n            board[r][c] = char\n        \n        for r in range(rows):\n            for c in range(cols):\n                dfs(r, c, root)\n        \n        return result",
+                "time_complexity": "O(m * n * 4^L)",
+                "space_complexity": "O(W * L)",
+                "explanation": "Build Trie from words, then DFS with backtracking on the board."
+            }
+        ],
+        "time_complexity": "O(m * n * 4^L)",
+        "space_complexity": "O(W * L)"
+    },
+    {
+        "title": "Median of Two Sorted Arrays",
+        "slug": "median-of-two-sorted-arrays",
+        "description": """Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
+
+The overall run time complexity should be O(log (m+n)).""",
+        "difficulty": "hard",
+        "examples": [
+            {"input": "nums1 = [1,3], nums2 = [2]", "output": "2.00000", "explanation": "merged array = [1,2,3] and median is 2."},
+            {"input": "nums1 = [1,2], nums2 = [3,4]", "output": "2.50000", "explanation": "merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5."}
+        ],
+        "constraints": ["nums1.length == m", "nums2.length == n", "0 <= m <= 1000", "0 <= n <= 1000", "1 <= m + n <= 2000", "-10^6 <= nums1[i], nums2[i] <= 10^6"],
+        "starter_code": {
+            "python": "class Solution:\n    def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:\n        pass",
+            "javascript": "var findMedianSortedArrays = function(nums1, nums2) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,3]\n[2]", "expected_output": "2.0"},
+            {"input": "[1,2]\n[3,4]", "expected_output": "2.5"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "binary_search", "divide_conquer"],
+        "companies": ["amazon", "google", "meta", "microsoft"],
+        "patterns": ["binary_search"],
+        "hints": [
+            "Binary search on the shorter array.",
+            "Partition both arrays such that left parts have half of total elements.",
+            "Check if partition is valid by comparing boundary elements."
+        ],
+        "solutions": [
+            {
+                "approach": "Binary Search",
+                "code": "class Solution:\n    def findMedianSortedArrays(self, nums1, nums2):\n        if len(nums1) > len(nums2):\n            nums1, nums2 = nums2, nums1\n        \n        m, n = len(nums1), len(nums2)\n        left, right = 0, m\n        \n        while left <= right:\n            i = (left + right) // 2\n            j = (m + n + 1) // 2 - i\n            \n            left1 = float('-inf') if i == 0 else nums1[i-1]\n            right1 = float('inf') if i == m else nums1[i]\n            left2 = float('-inf') if j == 0 else nums2[j-1]\n            right2 = float('inf') if j == n else nums2[j]\n            \n            if left1 <= right2 and left2 <= right1:\n                if (m + n) % 2 == 0:\n                    return (max(left1, left2) + min(right1, right2)) / 2\n                else:\n                    return max(left1, left2)\n            elif left1 > right2:\n                right = i - 1\n            else:\n                left = i + 1\n        \n        return 0",
+                "time_complexity": "O(log(min(m,n)))",
+                "space_complexity": "O(1)",
+                "explanation": "Binary search to find correct partition point."
+            }
+        ],
+        "time_complexity": "O(log(min(m,n)))",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Longest Valid Parentheses",
+        "slug": "longest-valid-parentheses",
+        "description": """Given a string containing just the characters '(' and ')', return the length of the longest valid (well-formed) parentheses substring.""",
+        "difficulty": "hard",
+        "examples": [
+            {"input": 's = "(()"', "output": "2", "explanation": "The longest valid parentheses substring is '()'."},
+            {"input": 's = ")()())"', "output": "4", "explanation": "The longest valid parentheses substring is '()()'."},
+            {"input": 's = ""', "output": "0", "explanation": ""}
+        ],
+        "constraints": ["0 <= s.length <= 3 * 10^4", "s[i] is '(' or ')'."],
+        "starter_code": {
+            "python": "class Solution:\n    def longestValidParentheses(self, s: str) -> int:\n        pass",
+            "javascript": "var longestValidParentheses = function(s) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "(()", "expected_output": "2"},
+            {"input": ")()())", "expected_output": "4"}
+        ],
+        "hidden_test_cases": [
+            {"input": "", "expected_output": "0"}
+        ],
+        "topics": ["string", "dp", "stack"],
+        "companies": ["amazon", "google", "meta"],
+        "patterns": ["stack", "dp"],
+        "hints": [
+            "Use a stack to track indices of unmatched parentheses.",
+            "Push index of '(' onto stack.",
+            "For ')', pop and calculate length if stack not empty."
+        ],
+        "solutions": [
+            {
+                "approach": "Stack",
+                "code": "class Solution:\n    def longestValidParentheses(self, s: str) -> int:\n        stack = [-1]\n        max_len = 0\n        \n        for i, char in enumerate(s):\n            if char == '(':\n                stack.append(i)\n            else:\n                stack.pop()\n                if not stack:\n                    stack.append(i)\n                else:\n                    max_len = max(max_len, i - stack[-1])\n        \n        return max_len",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(n)",
+                "explanation": "Use stack to track unmatched indices and calculate valid lengths."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(n)"
     }
 ]
 
