@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     # App
     APP_NAME: str = "AI Coding Teacher"
     DEBUG: bool = True
+    ENVIRONMENT: str = "development"
     
     # Database
     DATABASE_URL: str = "sqlite:///./coding_teacher.db"
@@ -18,6 +19,9 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "your-secret-key-change-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
+    
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = ""
     
     # Code Execution (Piston API - free, no key required)
     PISTON_API_URL: str = "https://emkc.org/api/v2/piston"

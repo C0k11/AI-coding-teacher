@@ -152,33 +152,39 @@ export default function ProblemPage() {
     setActiveTab('output')
 
     try {
-      // Use all test_cases from problem data
-      const testCases = problem.test_cases || []
-      
-      if (testCases.length === 0) {
-        setTestResults({
-          status: 'error',
-          test_results: [],
-          passed_count: 0,
-          total_count: 0,
-        })
+      const token = localStorage.getItem('token')
+      if (!token) {
+        alert('请先登录')
+        router.push('/login')
         return
       }
 
-      const result = await execution.test(code, language, testCases)
-      setTestResults(result)
+      // Call the submit API to save to database
+      const result = await problemsApi.submit(slug, code, language, token)
+      
+      // Format the result for display
+      const testResults = result.test_results || []
+      const passedCount = testResults.filter((t: any) => t.passed).length
+      
+      setTestResults({
+        status: result.status,
+        test_results: testResults,
+        passed_count: passedCount,
+        total_count: testResults.length,
+      })
       
       // Show success modal if all tests passed
       if (result.status === 'accepted') {
         setShowSuccess(true)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Submit failed:', error)
       setTestResults({
         status: 'error',
         test_results: [],
         passed_count: 0,
         total_count: 0,
+        error: error.message || 'Submit failed',
       })
     } finally {
       setIsSubmitting(false)

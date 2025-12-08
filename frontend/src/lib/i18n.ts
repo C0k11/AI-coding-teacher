@@ -147,6 +147,7 @@ export const translations = {
       quickActions: 'Quick Actions',
       practiceProblems: 'Practice Problems',
       codeBattle: 'Code Battle',
+      submissionHistory: 'Submission History',
     },
     // Battle page
     battle: {
@@ -319,6 +320,7 @@ export const translations = {
       quickActions: '快捷操作',
       practiceProblems: '练习题目',
       codeBattle: '代码对战',
+      submissionHistory: '刷题记录',
     },
     // Battle page
     battle: {

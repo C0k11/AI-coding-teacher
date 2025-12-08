@@ -9,10 +9,15 @@ from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from typing import Optional
 import bcrypt
+import httpx
+import logging
 
+from pydantic import BaseModel
 from app.models.database import get_db, User
 from app.schemas.schemas import UserCreate, UserResponse, Token
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -202,6 +207,7 @@ async def get_my_stats(
 ):
     """Get user statistics"""
     from app.models.database import Submission, Interview, Battle
+    from sqlalchemy import func
     
     # Get submission stats
     total_submissions = db.query(Submission).filter(
@@ -212,6 +218,17 @@ async def get_my_stats(
         Submission.user_id == current_user.id,
         Submission.status == "accepted"
     ).count()
+    
+    # Get unique problems solved (count distinct problem_ids with accepted status)
+    problems_solved = db.query(func.count(func.distinct(Submission.problem_id))).filter(
+        Submission.user_id == current_user.id,
+        Submission.status == "accepted"
+    ).scalar() or 0
+    
+    # Update user's problems_solved if different
+    if current_user.problems_solved != problems_solved:
+        current_user.problems_solved = problems_solved
+        db.commit()
     
     # Get interview stats
     interviews = db.query(Interview).filter(
@@ -235,14 +252,15 @@ async def get_my_stats(
     
     return {
         "user_id": current_user.id,
-        "problems_solved": current_user.problems_solved,
+        "problems_solved": problems_solved,
         "total_submissions": total_submissions,
-        "acceptance_rate": accepted_submissions / total_submissions if total_submissions > 0 else 0,
+        "accepted_submissions": accepted_submissions,
+        "acceptance_rate": round(accepted_submissions / total_submissions * 100, 1) if total_submissions > 0 else 0,
         "interviews_completed": current_user.interviews_completed,
         "average_interview_score": avg_interview_score,
         "battles_won": battles_won,
         "battles_played": battles_played,
-        "win_rate": battles_won / battles_played if battles_played > 0 else 0,
+        "win_rate": round(battles_won / battles_played * 100, 1) if battles_played > 0 else 0,
         "current_streak": current_user.current_streak,
         "elo_rating": current_user.elo_rating,
         "skill_level": current_user.skill_level,
@@ -269,4 +287,131 @@ async def get_leaderboard(
         }
         for i, user in enumerate(users)
     ]
+
+
+# Google OAuth
+class GoogleAuthRequest(BaseModel):
+    credential: str  # Google ID token
+
+
+@router.post("/auth/google")
+async def google_auth(request: GoogleAuthRequest, db: Session = Depends(get_db)):
+    """
+    Authenticate with Google ID token
+    """
+    try:
+        # Verify the Google ID token
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"https://oauth2.googleapis.com/tokeninfo?id_token={request.credential}"
+            )
+            
+            if response.status_code != 200:
+                raise HTTPException(status_code=401, detail="Invalid Google token")
+            
+            google_user = response.json()
+            
+            # Validate the token is for our app
+            if settings.GOOGLE_CLIENT_ID and google_user.get("aud") != settings.GOOGLE_CLIENT_ID:
+                logger.warning(f"Token audience mismatch: {google_user.get('aud')}")
+                # In development, we might skip this check
+                if settings.ENVIRONMENT != "development":
+                    raise HTTPException(status_code=401, detail="Invalid token audience")
+        
+        google_id = google_user.get("sub")
+        email = google_user.get("email")
+        name = google_user.get("name", email.split("@")[0])
+        avatar = google_user.get("picture")
+        
+        # Find existing user by oauth_id or email
+        existing_user = db.query(User).filter(User.oauth_id == google_id).first()
+        if not existing_user:
+            existing_user = db.query(User).filter(User.email == email).first()
+        
+        if existing_user:
+            # Update existing user
+            if avatar and avatar != existing_user.avatar_url:
+                existing_user.avatar_url = avatar
+            if not existing_user.oauth_id:
+                existing_user.oauth_id = google_id
+                existing_user.oauth_provider = "google"
+            db.commit()
+            user = existing_user
+        else:
+            # Create new user
+            user = User(
+                email=email,
+                username=name.replace(" ", "_").lower() + "_" + google_id[-6:],
+                hashed_password=None,
+                avatar_url=avatar,
+                oauth_provider="google",
+                oauth_id=google_id,
+                knowledge_state={}
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        
+        access_token = create_access_token(data={"sub": str(user.id)})
+        
+        logger.info(f"Google auth successful for: {email}")
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": {
+                "id": str(user.id),
+                "email": user.email,
+                "name": user.username,
+                "avatar": user.avatar_url,
+            }
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Google auth error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Authentication failed: {str(e)}")
+
+
+# Get all submissions for a user
+@router.get("/me/submissions")
+async def get_my_all_submissions(
+    status: Optional[str] = None,
+    limit: int = 50,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get all user's submissions (刷题记录)"""
+    from app.models.database import Submission, Problem
+    
+    query = db.query(Submission).filter(Submission.user_id == current_user.id)
+    
+    if status:
+        query = query.filter(Submission.status == status)
+    
+    submissions = query.order_by(Submission.created_at.desc()).limit(limit).all()
+    
+    result = []
+    for sub in submissions:
+        problem = db.query(Problem).filter(Problem.id == sub.problem_id).first()
+        result.append({
+            "id": sub.id,
+            "problem_id": sub.problem_id,
+            "problem_title": problem.title if problem else "Unknown",
+            "problem_slug": problem.slug if problem else "",
+            "problem_difficulty": problem.difficulty if problem else "",
+            "code": sub.code,
+            "language": sub.language,
+            "status": sub.status,
+            "runtime_ms": sub.runtime_ms,
+            "memory_kb": sub.memory_kb,
+            "ai_feedback": sub.ai_feedback,
+            "created_at": sub.created_at.isoformat() if sub.created_at else None
+        })
+    
+    return {
+        "submissions": result,
+        "total": len(result)
+    }
 

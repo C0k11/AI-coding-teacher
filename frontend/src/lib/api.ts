@@ -11,9 +11,9 @@ interface FetchOptions extends RequestInit {
 async function fetchAPI<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
   const { token, ...fetchOptions } = options
   
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
+    ...(options.headers as Record<string, string> || {}),
   }
   
   if (token) {
@@ -54,6 +54,17 @@ export interface LoginResponse {
   token_type: string
 }
 
+export interface AuthResponse {
+  access_token: string
+  token_type: string
+  user: {
+    id: string
+    email: string
+    name: string
+    avatar?: string
+  }
+}
+
 export const auth = {
   login: (email: string, password: string) =>
     fetchAPI<LoginResponse>('/users/login', {
@@ -68,11 +79,28 @@ export const auth = {
       body: JSON.stringify({ email, username, password }),
     }),
   
+  googleAuth: (credential: string) =>
+    fetchAPI<AuthResponse>('/users/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({ credential }),
+    }),
+  
   getMe: (token: string) =>
     fetchAPI<User>('/users/me', { token }),
   
   getStats: (token: string) =>
     fetchAPI<any>('/users/me/stats', { token }),
+  
+  getSubmissions: (token: string, status?: string, limit?: number) => {
+    const params = new URLSearchParams()
+    if (status) params.set('status', status)
+    if (limit) params.set('limit', limit.toString())
+    const query = params.toString()
+    return fetchAPI<{ submissions: Submission[]; total: number }>(
+      `/users/me/submissions${query ? `?${query}` : ''}`,
+      { token }
+    )
+  },
 }
 
 // ============== Problems ==============

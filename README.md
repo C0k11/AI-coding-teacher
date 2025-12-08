@@ -9,10 +9,15 @@ A modern coding education platform with algorithm problem library, real-time cod
 ## Features
 
 ### Problem Library
-- 29 curated algorithm problems (Easy, Medium, Hard)
+- **49 curated algorithm problems** (Fundamental, Medium, Hard)
 - Topics: Arrays, Strings, Hash Tables, Trees, Graphs, Dynamic Programming, Linked Lists, Binary Search, Sliding Window, Two Pointers, Bit Manipulation, Trie, Heap
 - Multi-language support: Python, JavaScript, Java, C++, Go, Rust
 - Progressive hint system with detailed solutions
+
+### Authentication
+- **Google OAuth Login** - One-click sign in with Google account
+- Traditional email/password registration
+- JWT-based session management
 
 ### Code Battle
 - **Quick Battle**: Fill-in-the-blank and multiple choice code questions with timer
@@ -24,7 +29,8 @@ A modern coding education platform with algorithm problem library, real-time cod
 ### Dashboard
 - Knowledge graph visualization of learning progress (React Flow)
 - Topic mastery tracking
-- Personal statistics and streaks
+- Personal statistics (problems solved, battles won, streaks)
+- **Submission History** - View all past submissions with code and AI feedback
 
 ### Local AI
 - AST-based code analysis (Python, JavaScript)
@@ -107,6 +113,7 @@ Access the application at http://localhost:3000
 DATABASE_URL=sqlite:///./coding_teacher.db
 SECRET_KEY=your-secret-key-change-in-production
 PISTON_API_URL=https://emkc.org/api/v2/piston
+GOOGLE_CLIENT_ID=your-google-client-id  # Optional: for Google OAuth
 ```
 
 ### Frontend Environment Variables
@@ -114,6 +121,7 @@ PISTON_API_URL=https://emkc.org/api/v2/piston
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000/api
 NEXT_PUBLIC_SOCKET_URL=http://localhost:8000
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id  # Optional: for Google OAuth
 ```
 
 ## API Endpoints
@@ -121,7 +129,10 @@ NEXT_PUBLIC_SOCKET_URL=http://localhost:8000
 ### Users
 - `POST /api/users/register` - User registration
 - `POST /api/users/login` - Authentication
+- `POST /api/users/auth/google` - Google OAuth login
 - `GET /api/users/me` - Current user profile
+- `GET /api/users/me/stats` - User statistics (problems solved, etc.)
+- `GET /api/users/me/submissions` - User submission history
 - `GET /api/users/leaderboard` - Global rankings
 
 ### Problems
@@ -142,41 +153,6 @@ NEXT_PUBLIC_SOCKET_URL=http://localhost:8000
 - `POST /api/execute/analyze` - Analyze code quality
 
 Full API documentation available at http://localhost:8000/docs
-
-## Project Structure
-
-```
-AI-coding-teacher/
-├── backend/
-│   ├── app/
-│   │   ├── models/          # SQLAlchemy models
-│   │   ├── routers/         # API route handlers
-│   │   ├── schemas/         # Pydantic schemas
-│   │   ├── services/        # Business logic
-│   │   │   ├── ai_service.py
-│   │   │   ├── code_analyzer.py
-│   │   │   ├── code_executor.py
-│   │   │   ├── code_similarity.py
-│   │   │   ├── recommendation.py
-│   │   │   └── websocket_manager.py
-│   │   ├── config.py
-│   │   └── main.py
-│   ├── seed_data.py         # Problem database seeder
-│   └── requirements.txt
-├── frontend/
-│   ├── src/
-│   │   ├── app/             # Next.js App Router pages
-│   │   │   ├── battle/      # Battle modes (quiz, arena)
-│   │   │   ├── dashboard/   # User dashboard
-│   │   │   ├── login/       # Authentication
-│   │   │   └── problems/    # Problem list and detail
-│   │   ├── components/      # Reusable UI components
-│   │   ├── lib/             # Utilities, API client, i18n
-│   │   └── store/           # Zustand state management
-│   ├── package.json
-│   └── tailwind.config.ts
-└── README.md
-```
 
 ## Deployment
 

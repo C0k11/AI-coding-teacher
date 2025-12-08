@@ -21,12 +21,15 @@ import {
   Flame,
   BookOpen,
   User,
-  LogOut
+  LogOut,
+  History,
+  Code2
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/useStore'
 import { useTranslations } from '@/lib/i18n'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import { auth } from '@/lib/api'
 
 
 // Knowledge Graph Data
@@ -111,6 +114,7 @@ export default function DashboardPage() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
   const [user, setUser] = useState<{ name: string } | null>(null)
+  const [stats, setStats] = useState(DEFAULT_STATS)
 
   const navItems = [
     { href: '/', label: t.nav.home },
@@ -126,6 +130,19 @@ export default function DashboardPage() {
         setUser(JSON.parse(savedUser))
       } catch {}
     }
+    
+    // Fetch latest stats from server
+    const token = localStorage.getItem('token')
+    if (token) {
+      auth.getStats(token).then(data => {
+        setStats({
+          problems_solved: data.problems_solved || 0,
+          battles_won: data.battles_won || 0,
+          current_streak: data.current_streak || 0,
+          elo_rating: data.elo_rating || 1200,
+        })
+      }).catch(console.error)
+    }
   }, [])
 
   const handleLogout = () => {
@@ -138,13 +155,6 @@ export default function DashboardPage() {
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     setSelectedNode(node.id)
   }, [])
-
-  const stats = authUser ? {
-    problems_solved: authUser.problems_solved,
-    battles_won: authUser.battles_won,
-    current_streak: authUser.current_streak,
-    elo_rating: authUser.elo_rating,
-  } : DEFAULT_STATS
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -312,6 +322,13 @@ export default function DashboardPage() {
                 >
                   <Swords className="w-5 h-5 text-blue-600" />
                   <span className="font-medium text-slate-900">{t.dashboard.codeBattle}</span>
+                </Link>
+                <Link
+                  href="/history"
+                  className="flex items-center gap-3 p-3 bg-slate-50 rounded-md hover:bg-slate-100 transition"
+                >
+                  <History className="w-5 h-5 text-emerald-600" />
+                  <span className="font-medium text-slate-900">{t.dashboard.submissionHistory}</span>
                 </Link>
               </div>
             </div>

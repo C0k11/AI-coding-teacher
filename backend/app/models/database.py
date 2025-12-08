@@ -33,8 +33,12 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255), unique=True, index=True)
     username = Column(String(100), unique=True, index=True)
-    hashed_password = Column(String(255))
+    hashed_password = Column(String(255), nullable=True)  # Nullable for OAuth users
     avatar_url = Column(String(500), nullable=True)
+    
+    # OAuth fields
+    oauth_provider = Column(String(50), nullable=True)  # 'google', 'github', etc.
+    oauth_id = Column(String(255), nullable=True)  # Provider's user ID
     
     # Skill tracking
     skill_level = Column(String(20), default="beginner")  # beginner, intermediate, advanced

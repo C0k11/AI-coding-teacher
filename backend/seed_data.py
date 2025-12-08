@@ -1254,6 +1254,426 @@ The overall run time complexity should be O(log (m+n)).""",
         ],
         "time_complexity": "O(n)",
         "space_complexity": "O(n)"
+    },
+    
+    # ============== More Classic Problems ==============
+    {
+        "title": "Merge Two Sorted Lists",
+        "slug": "merge-two-sorted-lists",
+        "description": """You are given the heads of two sorted linked lists list1 and list2.
+
+Merge the two lists into one sorted list. The list should be made by splicing together the nodes of the first two lists.
+
+Return the head of the merged linked list.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "list1 = [1,2,4], list2 = [1,3,4]", "output": "[1,1,2,3,4,4]", "explanation": ""},
+            {"input": "list1 = [], list2 = []", "output": "[]", "explanation": ""},
+            {"input": "list1 = [], list2 = [0]", "output": "[0]", "explanation": ""}
+        ],
+        "constraints": ["The number of nodes in both lists is in the range [0, 50].", "-100 <= Node.val <= 100", "Both list1 and list2 are sorted in non-decreasing order."],
+        "starter_code": {
+            "python": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\nclass Solution:\n    def mergeTwoLists(self, list1, list2):\n        pass",
+            "javascript": "/**\n * Definition for singly-linked list.\n * function ListNode(val, next) {\n *     this.val = (val===undefined ? 0 : val)\n *     this.next = (next===undefined ? null : next)\n * }\n */\nvar mergeTwoLists = function(list1, list2) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,2,4]\n[1,3,4]", "expected_output": "[1,1,2,3,4,4]"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["linked_list", "recursion"],
+        "companies": ["amazon", "microsoft", "google"],
+        "patterns": ["two_pointers", "recursion"],
+        "hints": [
+            "Use a dummy head node to simplify edge cases.",
+            "Compare nodes from both lists and link the smaller one."
+        ],
+        "solutions": [
+            {
+                "approach": "Iterative",
+                "code": "class Solution:\n    def mergeTwoLists(self, list1, list2):\n        dummy = ListNode()\n        current = dummy\n        \n        while list1 and list2:\n            if list1.val <= list2.val:\n                current.next = list1\n                list1 = list1.next\n            else:\n                current.next = list2\n                list2 = list2.next\n            current = current.next\n        \n        current.next = list1 or list2\n        return dummy.next",
+                "time_complexity": "O(n+m)",
+                "space_complexity": "O(1)",
+                "explanation": "Use two pointers to compare and merge nodes iteratively."
+            }
+        ],
+        "time_complexity": "O(n+m)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Best Time to Buy and Sell Stock",
+        "slug": "best-time-to-buy-and-sell-stock",
+        "description": """You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+
+Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "prices = [7,1,5,3,6,4]", "output": "5", "explanation": "Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5."},
+            {"input": "prices = [7,6,4,3,1]", "output": "0", "explanation": "No profitable transaction is possible."}
+        ],
+        "constraints": ["1 <= prices.length <= 10^5", "0 <= prices[i] <= 10^4"],
+        "starter_code": {
+            "python": "class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        pass",
+            "javascript": "var maxProfit = function(prices) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[7,1,5,3,6,4]", "expected_output": "5"},
+            {"input": "[7,6,4,3,1]", "expected_output": "0"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "dp"],
+        "companies": ["amazon", "meta", "google", "microsoft"],
+        "patterns": ["sliding_window", "dp"],
+        "hints": [
+            "Keep track of the minimum price seen so far.",
+            "Calculate the profit if we sell at the current price."
+        ],
+        "solutions": [
+            {
+                "approach": "One Pass",
+                "code": "class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        min_price = float('inf')\n        max_profit = 0\n        \n        for price in prices:\n            min_price = min(min_price, price)\n            max_profit = max(max_profit, price - min_price)\n        \n        return max_profit",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Track minimum price and maximum profit in a single pass."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Climbing Stairs",
+        "slug": "climbing-stairs",
+        "description": """You are climbing a staircase. It takes n steps to reach the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "n = 2", "output": "2", "explanation": "There are two ways: 1+1 and 2."},
+            {"input": "n = 3", "output": "3", "explanation": "There are three ways: 1+1+1, 1+2, and 2+1."}
+        ],
+        "constraints": ["1 <= n <= 45"],
+        "starter_code": {
+            "python": "class Solution:\n    def climbStairs(self, n: int) -> int:\n        pass",
+            "javascript": "var climbStairs = function(n) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "2", "expected_output": "2"},
+            {"input": "3", "expected_output": "3"},
+            {"input": "5", "expected_output": "8"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["dp", "math", "memoization"],
+        "companies": ["amazon", "google", "apple"],
+        "patterns": ["dp", "fibonacci"],
+        "hints": [
+            "This is essentially a Fibonacci sequence.",
+            "dp[n] = dp[n-1] + dp[n-2]"
+        ],
+        "solutions": [
+            {
+                "approach": "Dynamic Programming",
+                "code": "class Solution:\n    def climbStairs(self, n: int) -> int:\n        if n <= 2:\n            return n\n        \n        prev1, prev2 = 2, 1\n        for i in range(3, n + 1):\n            curr = prev1 + prev2\n            prev2 = prev1\n            prev1 = curr\n        \n        return prev1",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Use two variables to track the last two Fibonacci numbers."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Binary Search",
+        "slug": "binary-search",
+        "description": """Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.
+
+You must write an algorithm with O(log n) runtime complexity.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "nums = [-1,0,3,5,9,12], target = 9", "output": "4", "explanation": "9 exists in nums and its index is 4."},
+            {"input": "nums = [-1,0,3,5,9,12], target = 2", "output": "-1", "explanation": "2 does not exist in nums."}
+        ],
+        "constraints": ["1 <= nums.length <= 10^4", "-10^4 < nums[i], target < 10^4", "All the integers in nums are unique.", "nums is sorted in ascending order."],
+        "starter_code": {
+            "python": "class Solution:\n    def search(self, nums: list[int], target: int) -> int:\n        pass",
+            "javascript": "var search = function(nums, target) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[-1,0,3,5,9,12]\n9", "expected_output": "4"},
+            {"input": "[-1,0,3,5,9,12]\n2", "expected_output": "-1"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "binary_search"],
+        "companies": ["google", "microsoft", "amazon"],
+        "patterns": ["binary_search"],
+        "hints": [
+            "Use left and right pointers.",
+            "Calculate mid and compare with target.",
+            "Narrow down the search range based on comparison."
+        ],
+        "solutions": [
+            {
+                "approach": "Binary Search",
+                "code": "class Solution:\n    def search(self, nums: list[int], target: int) -> int:\n        left, right = 0, len(nums) - 1\n        \n        while left <= right:\n            mid = (left + right) // 2\n            if nums[mid] == target:\n                return mid\n            elif nums[mid] < target:\n                left = mid + 1\n            else:\n                right = mid - 1\n        \n        return -1",
+                "time_complexity": "O(log n)",
+                "space_complexity": "O(1)",
+                "explanation": "Divide the search space in half each iteration."
+            }
+        ],
+        "time_complexity": "O(log n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Linked List Cycle",
+        "slug": "linked-list-cycle",
+        "description": """Given head, the head of a linked list, determine if the linked list has a cycle in it.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer.
+
+Return true if there is a cycle in the linked list. Otherwise, return false.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "head = [3,2,0,-4], pos = 1", "output": "true", "explanation": "There is a cycle where tail connects to the second node."},
+            {"input": "head = [1,2], pos = 0", "output": "true", "explanation": "There is a cycle where tail connects to the first node."},
+            {"input": "head = [1], pos = -1", "output": "false", "explanation": "There is no cycle."}
+        ],
+        "constraints": ["The number of nodes in the list is in the range [0, 10^4].", "-10^5 <= Node.val <= 10^5", "pos is -1 or a valid index in the linked-list."],
+        "starter_code": {
+            "python": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, x):\n#         self.val = x\n#         self.next = None\n\nclass Solution:\n    def hasCycle(self, head) -> bool:\n        pass",
+            "javascript": "var hasCycle = function(head) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[3,2,0,-4]\n1", "expected_output": "True"},
+            {"input": "[1]\n-1", "expected_output": "False"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["linked_list", "two_pointers", "hash_table"],
+        "companies": ["amazon", "microsoft", "google"],
+        "patterns": ["fast_slow_pointers"],
+        "hints": [
+            "Use Floyd's Tortoise and Hare algorithm.",
+            "Use two pointers moving at different speeds."
+        ],
+        "solutions": [
+            {
+                "approach": "Two Pointers (Floyd's)",
+                "code": "class Solution:\n    def hasCycle(self, head) -> bool:\n        slow = fast = head\n        \n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n            \n            if slow == fast:\n                return True\n        \n        return False",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Fast pointer moves twice as fast. If there's a cycle, they will meet."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Reverse Linked List",
+        "slug": "reverse-linked-list",
+        "description": """Given the head of a singly linked list, reverse the list, and return the reversed list.""",
+        "difficulty": "easy",
+        "examples": [
+            {"input": "head = [1,2,3,4,5]", "output": "[5,4,3,2,1]", "explanation": ""},
+            {"input": "head = [1,2]", "output": "[2,1]", "explanation": ""},
+            {"input": "head = []", "output": "[]", "explanation": ""}
+        ],
+        "constraints": ["The number of nodes in the list is the range [0, 5000].", "-5000 <= Node.val <= 5000"],
+        "starter_code": {
+            "python": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\nclass Solution:\n    def reverseList(self, head):\n        pass",
+            "javascript": "var reverseList = function(head) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,2,3,4,5]", "expected_output": "[5,4,3,2,1]"},
+            {"input": "[1,2]", "expected_output": "[2,1]"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["linked_list", "recursion"],
+        "companies": ["amazon", "google", "microsoft", "apple"],
+        "patterns": ["linked_list"],
+        "hints": [
+            "Use three pointers: prev, curr, next.",
+            "Or use recursion."
+        ],
+        "solutions": [
+            {
+                "approach": "Iterative",
+                "code": "class Solution:\n    def reverseList(self, head):\n        prev = None\n        curr = head\n        \n        while curr:\n            next_node = curr.next\n            curr.next = prev\n            prev = curr\n            curr = next_node\n        \n        return prev",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Reverse links one by one using three pointers."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "3Sum",
+        "slug": "3sum",
+        "description": """Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+Notice that the solution set must not contain duplicate triplets.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": "nums = [-1,0,1,2,-1,-4]", "output": "[[-1,-1,2],[-1,0,1]]", "explanation": "The distinct triplets are [-1,0,1] and [-1,-1,2]."},
+            {"input": "nums = [0,1,1]", "output": "[]", "explanation": "The only possible triplet does not sum up to 0."},
+            {"input": "nums = [0,0,0]", "output": "[[0,0,0]]", "explanation": ""}
+        ],
+        "constraints": ["3 <= nums.length <= 3000", "-10^5 <= nums[i] <= 10^5"],
+        "starter_code": {
+            "python": "class Solution:\n    def threeSum(self, nums: list[int]) -> list[list[int]]:\n        pass",
+            "javascript": "var threeSum = function(nums) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[-1,0,1,2,-1,-4]", "expected_output": "[[-1,-1,2],[-1,0,1]]"},
+            {"input": "[0,0,0]", "expected_output": "[[0,0,0]]"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "two_pointers", "sorting"],
+        "companies": ["amazon", "meta", "google", "microsoft"],
+        "patterns": ["two_pointers", "sorting"],
+        "hints": [
+            "Sort the array first.",
+            "Fix one element and use two pointers for the other two.",
+            "Skip duplicates to avoid duplicate triplets."
+        ],
+        "solutions": [
+            {
+                "approach": "Two Pointers",
+                "code": "class Solution:\n    def threeSum(self, nums: list[int]) -> list[list[int]]:\n        nums.sort()\n        result = []\n        \n        for i in range(len(nums) - 2):\n            if i > 0 and nums[i] == nums[i-1]:\n                continue\n            \n            left, right = i + 1, len(nums) - 1\n            \n            while left < right:\n                total = nums[i] + nums[left] + nums[right]\n                \n                if total < 0:\n                    left += 1\n                elif total > 0:\n                    right -= 1\n                else:\n                    result.append([nums[i], nums[left], nums[right]])\n                    while left < right and nums[left] == nums[left+1]:\n                        left += 1\n                    while left < right and nums[right] == nums[right-1]:\n                        right -= 1\n                    left += 1\n                    right -= 1\n        \n        return result",
+                "time_complexity": "O(n²)",
+                "space_complexity": "O(1)",
+                "explanation": "Sort, fix one element, use two pointers for the rest."
+            }
+        ],
+        "time_complexity": "O(n²)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Product of Array Except Self",
+        "slug": "product-of-array-except-self",
+        "description": """Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+
+The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+
+You must write an algorithm that runs in O(n) time and without using the division operation.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": "nums = [1,2,3,4]", "output": "[24,12,8,6]", "explanation": ""},
+            {"input": "nums = [-1,1,0,-3,3]", "output": "[0,0,9,0,0]", "explanation": ""}
+        ],
+        "constraints": ["2 <= nums.length <= 10^5", "-30 <= nums[i] <= 30", "The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer."],
+        "starter_code": {
+            "python": "class Solution:\n    def productExceptSelf(self, nums: list[int]) -> list[int]:\n        pass",
+            "javascript": "var productExceptSelf = function(nums) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,2,3,4]", "expected_output": "[24,12,8,6]"},
+            {"input": "[-1,1,0,-3,3]", "expected_output": "[0,0,9,0,0]"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "prefix_sum"],
+        "companies": ["amazon", "meta", "google", "apple"],
+        "patterns": ["prefix_product"],
+        "hints": [
+            "Calculate prefix products from left.",
+            "Calculate suffix products from right.",
+            "Multiply prefix and suffix for each position."
+        ],
+        "solutions": [
+            {
+                "approach": "Prefix and Suffix Products",
+                "code": "class Solution:\n    def productExceptSelf(self, nums: list[int]) -> list[int]:\n        n = len(nums)\n        result = [1] * n\n        \n        # Left products\n        left = 1\n        for i in range(n):\n            result[i] = left\n            left *= nums[i]\n        \n        # Right products\n        right = 1\n        for i in range(n - 1, -1, -1):\n            result[i] *= right\n            right *= nums[i]\n        \n        return result",
+                "time_complexity": "O(n)",
+                "space_complexity": "O(1)",
+                "explanation": "Use the result array to store prefix products, then multiply with suffix products."
+            }
+        ],
+        "time_complexity": "O(n)",
+        "space_complexity": "O(1)"
+    },
+    {
+        "title": "Coin Change",
+        "slug": "coin-change",
+        "description": """You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+
+Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+
+You may assume that you have an infinite number of each kind of coin.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": "coins = [1,2,5], amount = 11", "output": "3", "explanation": "11 = 5 + 5 + 1"},
+            {"input": "coins = [2], amount = 3", "output": "-1", "explanation": ""},
+            {"input": "coins = [1], amount = 0", "output": "0", "explanation": ""}
+        ],
+        "constraints": ["1 <= coins.length <= 12", "1 <= coins[i] <= 2^31 - 1", "0 <= amount <= 10^4"],
+        "starter_code": {
+            "python": "class Solution:\n    def coinChange(self, coins: list[int], amount: int) -> int:\n        pass",
+            "javascript": "var coinChange = function(coins, amount) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": "[1,2,5]\n11", "expected_output": "3"},
+            {"input": "[2]\n3", "expected_output": "-1"},
+            {"input": "[1]\n0", "expected_output": "0"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "dp", "bfs"],
+        "companies": ["amazon", "google", "meta", "apple"],
+        "patterns": ["dp", "unbounded_knapsack"],
+        "hints": [
+            "Use dynamic programming.",
+            "dp[i] = minimum coins to make amount i.",
+            "For each amount, try all coins."
+        ],
+        "solutions": [
+            {
+                "approach": "Dynamic Programming",
+                "code": "class Solution:\n    def coinChange(self, coins: list[int], amount: int) -> int:\n        dp = [float('inf')] * (amount + 1)\n        dp[0] = 0\n        \n        for i in range(1, amount + 1):\n            for coin in coins:\n                if coin <= i:\n                    dp[i] = min(dp[i], dp[i - coin] + 1)\n        \n        return dp[amount] if dp[amount] != float('inf') else -1",
+                "time_complexity": "O(amount * coins)",
+                "space_complexity": "O(amount)",
+                "explanation": "Build up the solution from smaller amounts."
+            }
+        ],
+        "time_complexity": "O(amount * coins)",
+        "space_complexity": "O(amount)"
+    },
+    {
+        "title": "Number of Islands",
+        "slug": "number-of-islands",
+        "description": """Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.""",
+        "difficulty": "medium",
+        "examples": [
+            {"input": 'grid = [\n  ["1","1","1","1","0"],\n  ["1","1","0","1","0"],\n  ["1","1","0","0","0"],\n  ["0","0","0","0","0"]\n]', "output": "1", "explanation": ""},
+            {"input": 'grid = [\n  ["1","1","0","0","0"],\n  ["1","1","0","0","0"],\n  ["0","0","1","0","0"],\n  ["0","0","0","1","1"]\n]', "output": "3", "explanation": ""}
+        ],
+        "constraints": ["m == grid.length", "n == grid[i].length", "1 <= m, n <= 300", "grid[i][j] is '0' or '1'."],
+        "starter_code": {
+            "python": "class Solution:\n    def numIslands(self, grid: list[list[str]]) -> int:\n        pass",
+            "javascript": "var numIslands = function(grid) {\n    \n};"
+        },
+        "test_cases": [
+            {"input": '[["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]', "expected_output": "1"},
+            {"input": '[["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]', "expected_output": "3"}
+        ],
+        "hidden_test_cases": [],
+        "topics": ["array", "dfs", "bfs", "matrix"],
+        "companies": ["amazon", "meta", "google", "microsoft"],
+        "patterns": ["dfs", "bfs", "flood_fill"],
+        "hints": [
+            "Use DFS or BFS to explore connected land cells.",
+            "Mark visited cells to avoid counting them again."
+        ],
+        "solutions": [
+            {
+                "approach": "DFS",
+                "code": "class Solution:\n    def numIslands(self, grid: list[list[str]]) -> int:\n        if not grid:\n            return 0\n        \n        rows, cols = len(grid), len(grid[0])\n        count = 0\n        \n        def dfs(r, c):\n            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == '0':\n                return\n            grid[r][c] = '0'\n            dfs(r+1, c)\n            dfs(r-1, c)\n            dfs(r, c+1)\n            dfs(r, c-1)\n        \n        for r in range(rows):\n            for c in range(cols):\n                if grid[r][c] == '1':\n                    count += 1\n                    dfs(r, c)\n        \n        return count",
+                "time_complexity": "O(m*n)",
+                "space_complexity": "O(m*n)",
+                "explanation": "DFS to explore and mark all connected land cells."
+            }
+        ],
+        "time_complexity": "O(m*n)",
+        "space_complexity": "O(m*n)"
     }
 ]
 
@@ -1262,27 +1682,36 @@ def seed_problems():
     """Seed the database with sample problems"""
     init_db()
     db = SessionLocal()
+    added = 0
+    skipped = 0
+    seen_slugs = set()
     
-    try:
-        for problem_data in SAMPLE_PROBLEMS:
-            # Check if problem already exists
-            existing = db.query(Problem).filter(Problem.slug == problem_data["slug"]).first()
-            if existing:
-                print(f"Problem '{problem_data['title']}' already exists, skipping...")
-                continue
-            
+    for problem_data in SAMPLE_PROBLEMS:
+        slug = problem_data["slug"]
+        
+        # Skip duplicates in the list itself
+        if slug in seen_slugs:
+            continue
+        seen_slugs.add(slug)
+        
+        # Check if problem already exists in DB
+        existing = db.query(Problem).filter(Problem.slug == slug).first()
+        if existing:
+            skipped += 1
+            continue
+        
+        try:
             problem = Problem(**problem_data)
             db.add(problem)
-            print(f"Added problem: {problem_data['title']}")
-        
-        db.commit()
-        print("\nDatabase seeded successfully!")
-        
-    except Exception as e:
-        print(f"Error seeding database: {e}")
-        db.rollback()
-    finally:
-        db.close()
+            db.commit()
+            added += 1
+            print(f"Added: {problem_data['title']}")
+        except Exception as e:
+            db.rollback()
+            print(f"Error adding {problem_data['title']}: {e}")
+    
+    db.close()
+    print(f"\nDone! Added: {added}, Skipped: {skipped}")
 
 
 if __name__ == "__main__":
